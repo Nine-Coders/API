@@ -12,7 +12,10 @@ CREATE TABLE "study"."rooms" (
   "id" SERIAL PRIMARY KEY NOT NULL,
   "name" varchar,
   "topic_id" int,
-  "created_at" timestamp,
+  "created_at" timestamp default now(),
+  "thumbnail" varchar,
+  "max_users" int,
+  "user_ids" json,
   "is_private" boolean,
   "admin_id" int
 );
@@ -23,7 +26,7 @@ CREATE TABLE "study"."messages" (
   "user_id" int,
   "body" varchar,
   "file_id" int,
-  "created_at" timestamp
+  "created_at" timestamp default now()
 );
 
 CREATE TABLE "study"."users" (
@@ -38,6 +41,27 @@ CREATE TABLE "study"."files" (
   "url" varchar
 );
 
+CREATE TABLE "study"."events" (
+  "id" SERIAL PRIMARY KEY NOT NULL,
+  "name" varchar,
+  "description" varchar,
+  "user_id" int,
+  "room_id" int,
+  "created_at" timestamp default now(),
+  "event_date" bigint
+);
+
+CREATE TABLE "study"."goals" (
+  "id" SERIAL PRIMARY KEY NOT NULL,
+  "name" varchar,
+  "description" varchar,
+  "created_at" timestamp default now(),
+  "goal_date" bigint,
+  "creator_id" int,
+  "user_ids" json,
+  "room_id" int
+);
+
 ALTER TABLE "study"."rooms" ADD FOREIGN KEY ("topic_id") REFERENCES "study"."topics" ("id");
 
 ALTER TABLE "study"."messages" ADD FOREIGN KEY ("room_id") REFERENCES "study"."rooms" ("id");
@@ -48,7 +72,15 @@ ALTER TABLE "study"."messages" ADD FOREIGN KEY ("file_id") REFERENCES "study"."f
 
 ALTER TABLE "study"."rooms" ADD FOREIGN KEY ("admin_id") REFERENCES "study"."users" ("id");
 
+ALTER TABLE "study"."events" ADD FOREIGN KEY ("user_id") REFERENCES "study"."users" ("id");
 
--- to create schema, run
+ALTER TABLE "study"."events" ADD FOREIGN KEY ("room_id") REFERENCES "study"."rooms" ("id");
+
+ALTER TABLE "study"."goals" ADD FOREIGN KEY ("creator_id") REFERENCES "study"."users" ("id");
+
+ALTER TABLE "study"."goals" ADD FOREIGN KEY ("room_id") REFERENCES "study"."rooms" ("id");
+
+
+-- to create schema, run:
 -- psql -h localhost -f schema.sql
 -- in terminal
