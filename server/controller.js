@@ -1,10 +1,14 @@
 const { Client } = require('pg')
-const client = new Client()
-await client.connect()
+const connectionString = require('../config.js').connectionString
+
+const client = new Client({
+  connectionString,
+})
+client.connect()
 
 module.exports = {
   getAllTopics: (cb) => {
-    let queryString = '';
+    let queryString = 'SELECT * FROM study.topics';
     client.query(queryString, (err, data) => {
       if (err) {
         console.log(err);
