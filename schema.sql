@@ -25,7 +25,7 @@ CREATE TABLE "study"."messages" (
   "room_id" int,
   "user_id" int,
   "body" varchar,
-  "file_id" int,
+  "file_id" int default null,
   "created_at" timestamp default now()
 );
 
@@ -48,7 +48,7 @@ CREATE TABLE "study"."events" (
   "user_id" int,
   "room_id" int,
   "created_at" timestamp default now(),
-  "event_date" bigint
+  "event_date" timestamp
 );
 
 CREATE TABLE "study"."goals" (
@@ -56,7 +56,7 @@ CREATE TABLE "study"."goals" (
   "name" varchar,
   "description" varchar,
   "created_at" timestamp default now(),
-  "goal_date" bigint,
+  "goal_date" timestamp default null,
   "creator_id" int,
   "user_ids" json,
   "room_id" int

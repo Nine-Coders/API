@@ -4,7 +4,13 @@ const connectionString = require('../config.js').connectionString
 const client = new Client({
   connectionString,
 })
-client.connect()
+client.connect(err => {
+  if (err) {
+    console.log('connection error: ', err.stack);
+  } else {
+    console.log('connected to pg');
+  }
+})
 
 module.exports = {
   getAllTopics: (cb) => {
