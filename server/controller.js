@@ -25,38 +25,49 @@ module.exports = {
     });
   },
   getAllRooms: (topicId, cb) => {
-    let queryString = '?';
+    let queryString = 'SELECT * FROM study.rooms WHERE topic_id=$1';
     let queryParams = [topicId];
-    client.query(queryString, (err, data) => {
+    client.query(queryString, queryParams, (err, data) => {
       if (err) {
         console.log(err);
         cb(err);
       } else {
-        cb(null, data);
+        cb(null, data.rows);
       }
     });
   },
   getAllMessages: (roomId, cb) => {
-    let queryString = '?';
+    let queryString = 'SELECT * FROM study.messages WHERE room_id=$1';
     let queryParams = [roomId];
-    client.query(queryString, (err, data) => {
+    client.query(queryString, queryParams, (err, data) => {
       if (err) {
         console.log(err);
         cb(err);
       } else {
-        cb(null, data);
+        cb(null, data.rows);
       }
     });
   },
   getAllUsers: (roomId, cb) => {
-    let queryString = '?';
+    let queryString = 'SELECT user_ids FROM study.rooms WHERE id=$1';
     let queryParams = [roomId];
-    client.query(queryString, (err, data) => {
+    client.query(queryString, queryParams, (err, data) => {
       if (err) {
         console.log(err);
         cb(err);
       } else {
-        cb(null, data);
+        // console.log(data.rows[0].user_ids);
+        let altQueryString = 'SELECT * FROM study.users WHERE id=ANY(ARRAY$1)';
+        let altQueryParams = [data.rows[0].user_ids];
+        client.query(altQueryString, altQueryParams, (err, userData) => {
+          if (err) {
+            console.log(err)
+            cb(err)
+          } else {
+            cb(null, userData.rows)
+          }
+        })
+        // cb(null, data.rows);
       }
     });
   },
