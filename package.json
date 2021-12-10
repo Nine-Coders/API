@@ -4,7 +4,8 @@
   "description": "API for loader.io",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon server/index.js"
+    "start": "nodemon server/index.js",
+    "test": "jest --forceExit"
   },
   "repository": {
     "type": "git",
@@ -20,5 +21,9 @@
     "cors": "^2.8.5",
     "express": "^4.17.1",
     "pg": "^8.7.1"
+  },
+  "devDependencies": {
+    "jest": "^27.4.4",
+    "supertest": "^6.1.6"
   }
 }

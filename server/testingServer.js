@@ -1,10 +1,8 @@
 const express = require('express');
 const app = express();
 const cors = require('cors');
-const port = 5000;
 const db = require('./controller.js')
 
-app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
@@ -168,7 +166,4 @@ app.put('/files/:file_id/delete', (req, res) => {
   })
 })
 
-
-app.listen(port, () => {
-  console.log(`listening on port ${port}`);
-})
+module.exports = app;

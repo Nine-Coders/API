@@ -137,13 +137,17 @@ Response:
 [
     {
       "id": 1,
-      "username": "user1",
+      "first_name": "user1",
+      "last_name": "last name",
+      "email": "email1@email.email",
       "avatar": "https://via.placeholder.com/50x50",
       "created_at": "2021-01-13T12:05:06.000Z"
     },
     {
       "id": 3,
-      "username": "user3",
+      "first_name": "user3",
+      "last_name": "last name",
+      "email": "email3@email.email",
       "avatar": "https://via.placeholder.com/50x50",
       "created_at": "2021-01-13T12:05:06.000Z"
     },
