@@ -119,7 +119,6 @@ module.exports = {
     });
   },
   postEvent: (eventData, cb) => {
-    console.log('event data: ', eventData);
     let queryString = 'INSERT INTO study.events (name, description, user_id, room_id, event_date) VALUES($1, $2, $3, $4, $5)';
     let queryParams = [eventData.name, eventData.description, eventData.user_id, eventData.room_id, eventData.event_date];
     client.query(queryString, queryParams, (err, data) => {
@@ -128,6 +127,30 @@ module.exports = {
         cb(err);
       } else {
         cb(null, data);
+      }
+    });
+  },
+  getEvents: (roomId, cb) => {
+    let queryString = 'SELECT * FROM study.events WHERE room_id=$1';
+    let queryParams = [roomId];
+    client.query(queryString, queryParams, (err, data) => {
+      if (err) {
+        console.log(err);
+        cb(err);
+      } else {
+        cb(null, data.rows);
+      }
+    });
+  },
+  toggleArchiveRoom: (roomId, cb) => {
+    let queryString = 'UPDATE study.rooms SET is_archived = NOT is_archived WHERE id=$1';
+    let queryParams = [roomId.room_id];
+    client.query(queryString, queryParams, (err, data) => {
+      if (err) {
+        console.log(err);
+        cb(err);
+      } else {
+        cb(null, data.rows);
       }
     });
   },

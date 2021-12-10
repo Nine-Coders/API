@@ -95,6 +95,8 @@ ALTER TABLE "study"."users/rooms" ADD FOREIGN KEY ("user_id") REFERENCES "study"
 -- psql -h localhost -f schema.sql
 -- in terminal
 
+-- change filepath for .csv files below:
+
 COPY "study"."topics"("id", "name", "url")
 FROM '/Users/phitruong/hackreactor/hrlax47/Blue-Ocean/API/mockdata/study.io db - topics.csv'
 DELIMITER ','

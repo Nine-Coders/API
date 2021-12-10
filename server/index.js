@@ -107,6 +107,16 @@ app.post('/rooms/create_event', (req, res) => {
   })
 })
 
+app.put('/toggle-archive', (req, res) => {
+  db.toggleArchiveRoom(req.body, (err, response) => {
+    if (err) {
+      res.send(err)
+    } else {
+      res.send(response)
+    }
+  })
+})
+
 app.listen(port, () => {
   console.log(`listening on port ${port}`);
 })
