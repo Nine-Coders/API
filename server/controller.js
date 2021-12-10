@@ -83,8 +83,8 @@ module.exports = {
     });
   },
   createUser: (userData, cb) => {
-    let queryString = 'INSERT INTO study.users (username, avatar) VALUES($1, $2)';
-    let queryParams = [userData.username, userData.avatar];
+    let queryString = 'INSERT INTO study.users (first_name, last_name, email, avatar) VALUES($1, $2)';
+    let queryParams = [userData.first_name, userData.last_name, userData.email, userData.avatar];
     client.query(queryString, queryParams, (err, data) => {
       if (err) {
         console.log(err);
@@ -154,10 +154,58 @@ module.exports = {
       }
     });
   },
-  postFile: (fileData, cb) => {
-    let queryString = '?';
-    let queryParams = [...fileData];
-    client.query(queryString, (err, data) => {
+  getGoals: (roomId, cb) => {
+    let queryString = 'SELECT * FROM study.goals WHERE room_id=$1';
+    let queryParams = [roomId];
+    client.query(queryString, queryParams, (err, data) => {
+      if (err) {
+        console.log(err);
+        cb(err);
+      } else {
+        cb(null, data.rows);
+      }
+    });
+  },
+  postGoal: (roomId, goalData, cb) => {
+    let queryString = 'INSERT INTO study.goals (name, description, goal_date, user_id, room_id) VALUES($1, $2, $3, $4, $5)';
+    let queryParams = [goalData.name, goalData.description, goalData.goal_date, goalData.user_id, roomId];
+    client.query(queryString, queryParams, (err, data) => {
+      if (err) {
+        console.log(err);
+        cb(err);
+      } else {
+        cb(null, data);
+      }
+    });
+  },
+  getFiles: (roomId, cb) => {
+    let queryString = 'SELECT * FROM study.files WHERE room_id=$1';
+    let queryParams = [roomId];
+    client.query(queryString, queryParams, (err, data) => {
+      if (err) {
+        console.log(err);
+        cb(err);
+      } else {
+        cb(null, data.rows);
+      }
+    });
+  },
+  postFile: (roomId, fileData, cb) => {
+    let queryString = 'INSERT INTO study.files (url, name, room_id, user_id) VALUES($1, $2, $3, $4)';
+    let queryParams = [fileData.url, fileData.name, roomId, fileData.user_id];
+    client.query(queryString, queryParams, (err, data) => {
+      if (err) {
+        console.log(err);
+        cb(err);
+      } else {
+        cb(null, data);
+      }
+    });
+  },
+  deleteFile: (fileId, cb) => {
+    let queryString = 'DELETE FROM study.files WHERE id=$1';
+    let queryParams = [fileId];
+    client.query(queryString, queryParams, (err, data) => {
       if (err) {
         console.log(err);
         cb(err);

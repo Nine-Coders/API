@@ -37,7 +37,9 @@ CREATE TABLE "study"."users/rooms" (
 
 CREATE TABLE "study"."users" (
   "id" SERIAL PRIMARY KEY NOT NULL,
-  "username" varchar,
+  "first_name" varchar,
+  "last_name" varchar,
+  "email" varchar,
   "avatar" varchar,
   "created_at" timestamp default now()
 );
@@ -67,7 +69,7 @@ CREATE TABLE "study"."goals" (
   "description" varchar,
   "created_at" timestamp default now(),
   "goal_date" timestamp default null,
-  "creator_id" int,
+  "user_id" int,
   "room_id" int
 );
 
@@ -90,7 +92,7 @@ ALTER TABLE "study"."events" ADD FOREIGN KEY ("user_id") REFERENCES "study"."use
 
 ALTER TABLE "study"."events" ADD FOREIGN KEY ("room_id") REFERENCES "study"."rooms" ("id");
 
-ALTER TABLE "study"."goals" ADD FOREIGN KEY ("creator_id") REFERENCES "study"."users" ("id");
+ALTER TABLE "study"."goals" ADD FOREIGN KEY ("user_id") REFERENCES "study"."users" ("id");
 
 ALTER TABLE "study"."goals" ADD FOREIGN KEY ("room_id") REFERENCES "study"."rooms" ("id");
 
@@ -118,7 +120,7 @@ FROM '/Users/taite510/work/API/csv/topics.csv'
 DELIMITER ','
 CSV HEADER;
 
-COPY "study"."users"("username", "avatar")
+COPY "study"."users"("first_name", "last_name", "email", "avatar")
 FROM '/Users/taite510/work/API/csv/users.csv'
 DELIMITER ','
 CSV HEADER;
@@ -143,7 +145,7 @@ FROM '/Users/taite510/work/API/csv/events.csv'
 DELIMITER ','
 CSV HEADER;
 
-COPY "study"."goals"("name", "description", "created_at", "goal_date", "creator_id", "room_id")
+COPY "study"."goals"("name", "description", "created_at", "goal_date", "user_id", "room_id")
 FROM '/Users/taite510/work/API/csv/goals.csv'
 DELIMITER ','
 CSV HEADER;

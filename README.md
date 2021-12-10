@@ -29,7 +29,7 @@ Due to security concerns, the Postgres connection string is stored in a config.j
 
 ## Documentation
 
-[Quick Start Guide For PostgreSQL](https://chartio.com/resources/tutorials/how-to-start-postgresql-server-on-mac-os-x/)  
+[Quick Start Guide For PostgreSQL](https://chartio.com/resources/tutorials/how-to-start-postgresql-server-on-mac-os-x/)
 [Mock Data](https://docs.google.com/spreadsheets/d/1pP8pmFDK-arZ6Yv5m1dNQe5gDxmmd9VweVFYvMPET-I/edit?usp=sharing)
 
 ## API Reference
@@ -139,15 +139,15 @@ Response:
       "id": 1,
       "first_name": "user1",
       "last_name": "last name",
-      "email": "email@email.email",
+      "email": "email1@email.email",
       "avatar": "https://via.placeholder.com/50x50",
       "created_at": "2021-01-13T12:05:06.000Z"
     },
     {
-      "id": 1,
-      "first_name": "user2",
+      "id": 3,
+      "first_name": "user3",
       "last_name": "last name",
-      "email": "email@email.email",
+      "email": "email3@email.email",
       "avatar": "https://via.placeholder.com/50x50",
       "created_at": "2021-01-13T12:05:06.000Z"
     },
