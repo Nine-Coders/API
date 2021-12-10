@@ -240,7 +240,6 @@ Request body:
 | `description`      | `string` | **Required**. Description of the goal |
 | `goal_date`      | `datetime` | Date of the goal |
 | `creator_id`      | `integer` | **Required**. Id of user who created |
-| `room_id`      | `integer` | **Required**. Id of room the goal b |
 
 #### Toggle a room as archived
 
