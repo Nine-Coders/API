@@ -49,17 +49,17 @@ module.exports = {
     });
   },
   getAllUsers: (roomId, cb) => {
-    let queryString = 'SELECT user_ids FROM study.rooms WHERE id=$1';
+    let queryString = 'SELECT array_agg(user_id::integer) FROM study."users/rooms" WHERE room_id=$1';
     let queryParams = [roomId];
     client.query(queryString, queryParams, (err, data) => {
       if (err) {
         console.log(err);
         cb(err);
       } else {
-        // console.log(data.rows[0].user_ids);
-        let altQueryString = 'SELECT * FROM study.users WHERE id=ANY(ARRAY$1)';
-        let altQueryParams = [data.rows[0].user_ids];
-        client.query(altQueryString, altQueryParams, (err, userData) => {
+        // console.log('data: ', data.rows[0].array_agg); // [ 1, 4 ]
+        let usersString = JSON.stringify(data.rows[0].array_agg)
+        let altQueryString = `SELECT * FROM study.users WHERE id=ANY(ARRAY${usersString})`;
+        client.query(altQueryString, (err, userData) => {
           if (err) {
             console.log(err)
             cb(err)
@@ -67,14 +67,13 @@ module.exports = {
             cb(null, userData.rows)
           }
         })
-        // cb(null, data.rows);
       }
     });
   },
-  postMessage: (messageData, cb) => {
-    let queryString = '?';
-    let queryParams = [...messageData];
-    client.query(queryString, (err, data) => {
+  postMessage: (roomId, messageData, cb) => {
+    let queryString = 'INSERT INTO study.messages (room_id, user_id, body) VALUES($1, $2, $3)';
+    let queryParams = [roomId, messageData.user_id, messageData.body];
+    client.query(queryString, queryParams, (err, data) => {
       if (err) {
         console.log(err);
         cb(err);
@@ -84,9 +83,11 @@ module.exports = {
     });
   },
   createUser: (userData, cb) => {
-    let queryString = '?';
-    let queryParams = [...userData];
-    client.query(queryString, (err, data) => {
+    console.log(userData)
+    let string = '[]'
+    let queryString = `INSERT INTO study.users (username, avatar) VALUES($1, $2)`;
+    let queryParams = [userData.username, userData.avatar];
+    client.query(queryString, queryParams, (err, data) => {
       if (err) {
         console.log(err);
         cb(err);

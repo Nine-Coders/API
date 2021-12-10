@@ -27,7 +27,7 @@ app.get('/rooms/:topic_id', (req, res) => {
   })
 })
 
-app.get('/messages/:room_id', (req, res) => {
+app.get('/rooms/:room_id/messages', (req, res) => {
   db.getAllMessages(req.params.room_id, (err, response) => {
     if (err) {
       res.send(err)
@@ -37,7 +37,7 @@ app.get('/messages/:room_id', (req, res) => {
   })
 })
 
-app.get('/users/:room_id', (req, res) => {
+app.get('/rooms/:room_id/users', (req, res) => {
   db.getAllUsers(req.params.room_id, (err, response) => {
     if (err) {
       res.send(err)
@@ -47,6 +47,25 @@ app.get('/users/:room_id', (req, res) => {
   })
 })
 
+app.post('/rooms/:room_id/messages', (req, res) => {
+  db.postMessage(req.params.room_id, req.body, (err, response) => {
+    if (err) {
+      res.send(err)
+    } else {
+      res.send(response)
+    }
+  })
+})
+
+app.post('/users/create', (req, res) => {
+  db.createUser(req.body, (err, response) => {
+    if (err) {
+      res.send(err)
+    } else {
+      res.send(response)
+    }
+  })
+})
 app.listen(port, () => {
   console.log(`listening on port ${port}`);
 })
