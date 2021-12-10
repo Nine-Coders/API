@@ -6,6 +6,7 @@ const db = require('./controller.js')
 
 app.use(cors());
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 app.get('/topics', (req, res) => {
   db.getAllTopics((err, response) => {
@@ -17,7 +18,7 @@ app.get('/topics', (req, res) => {
   })
 })
 
-app.get('/rooms/:topic_id', (req, res) => {
+app.get('/:topic_id/rooms', (req, res) => {
   db.getAllRooms(req.params.topic_id, (err, response) => {
     if (err) {
       res.send(err)
@@ -77,7 +78,7 @@ app.post('/users/create', (req, res) => {
   })
 })
 
-app.post('/rooms/:topic_id/create', (req, res) => {
+app.post('/:topic_id/rooms/create', (req, res) => {
   db.createRoom(req.params.topic_id, req.body, (err, response) => {
     if (err) {
       res.send(err)

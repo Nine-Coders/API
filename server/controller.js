@@ -20,7 +20,7 @@ module.exports = {
         console.log(err);
         cb(err);
       } else {
-        cb(null, data);
+        cb(null, data.rows);
       }
     });
   },
