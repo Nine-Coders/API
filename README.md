@@ -239,7 +239,7 @@ Request body:
 | `name`      | `string` | **Required**. Name of the goal |
 | `description`      | `string` | **Required**. Description of the goal |
 | `goal_date`      | `datetime` | Date of the goal |
-| `creator_id`      | `integer` | **Required**. Id of user who created |
+| `user_id`      | `integer` | **Required**. Id of user who created the goal |
 
 #### Toggle a room as archived
 
