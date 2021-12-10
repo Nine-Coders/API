@@ -47,6 +47,16 @@ app.get('/rooms/:room_id/users', (req, res) => {
   })
 })
 
+app.get('/rooms/:room_id/events', (req, res) => {
+  db.getEvents(req.params.room_id, (err, response) => {
+    if (err) {
+      res.send(err)
+    } else {
+      res.send(response)
+    }
+  })
+})
+
 app.post('/rooms/:room_id/messages', (req, res) => {
   db.postMessage(req.params.room_id, req.body, (err, response) => {
     if (err) {
@@ -66,6 +76,37 @@ app.post('/users/create', (req, res) => {
     }
   })
 })
+
+app.post('/rooms/:topic_id/create', (req, res) => {
+  db.createRoom(req.params.topic_id, req.body, (err, response) => {
+    if (err) {
+      res.send(err)
+    } else {
+      res.send(response)
+    }
+  })
+})
+
+app.post('/addUserToRoom', (req, res) => {
+  db.addUserToRoom(req.body, (err, response) => {
+    if (err) {
+      res.send(err)
+    } else {
+      res.send(response)
+    }
+  })
+})
+
+app.post('/rooms/create_event', (req, res) => {
+  db.postEvent(req.body, (err, response) => {
+    if (err) {
+      res.send(err)
+    } else {
+      res.send(response)
+    }
+  })
+})
+
 app.listen(port, () => {
   console.log(`listening on port ${port}`);
 })

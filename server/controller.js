@@ -83,10 +83,45 @@ module.exports = {
     });
   },
   createUser: (userData, cb) => {
-    console.log(userData)
-    let string = '[]'
-    let queryString = `INSERT INTO study.users (username, avatar) VALUES($1, $2)`;
+    let queryString = 'INSERT INTO study.users (username, avatar) VALUES($1, $2)';
     let queryParams = [userData.username, userData.avatar];
+    client.query(queryString, queryParams, (err, data) => {
+      if (err) {
+        console.log(err);
+        cb(err);
+      } else {
+        cb(null, data);
+      }
+    });
+  },
+  createRoom: (topicId, roomData, cb) => {
+    let queryString = 'INSERT INTO study.rooms (name, topic_id, thumbnail, max_users, is_private, admin_id) VALUES($1, $2, $3, $4, $5, $6)';
+    let queryParams = [roomData.name, topicId, roomData.thumbnail, roomData.max_users, roomData.is_private, roomData.admin_id];
+    client.query(queryString, queryParams, (err, data) => {
+      if (err) {
+        console.log(err);
+        cb(err);
+      } else {
+        cb(null, data);
+      }
+    });
+  },
+  addUserToRoom: (data, cb) => {
+    let queryString = 'INSERT INTO study."users/rooms" (user_id, room_id) VALUES($1, $2)';
+    let queryParams = [data.user_id, data.room_id];
+    client.query(queryString, queryParams, (err, data) => {
+      if (err) {
+        console.log(err);
+        cb(err);
+      } else {
+        cb(null, data);
+      }
+    });
+  },
+  postEvent: (eventData, cb) => {
+    console.log('event data: ', eventData);
+    let queryString = 'INSERT INTO study.events (name, description, user_id, room_id, event_date) VALUES($1, $2, $3, $4, $5)';
+    let queryParams = [eventData.name, eventData.description, eventData.user_id, eventData.room_id, eventData.event_date];
     client.query(queryString, queryParams, (err, data) => {
       if (err) {
         console.log(err);
@@ -107,5 +142,6 @@ module.exports = {
         cb(null, data);
       }
     });
-  }
+  },
+
 }
