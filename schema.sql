@@ -25,7 +25,6 @@ CREATE TABLE "study"."messages" (
   "room_id" int,
   "user_id" int,
   "body" varchar,
-  "file_id" int default null,
   "created_at" timestamp default now()
 );
 
@@ -45,7 +44,11 @@ CREATE TABLE "study"."users" (
 
 CREATE TABLE "study"."files" (
   "id" SERIAL PRIMARY KEY NOT NULL,
-  "url" varchar
+  "url" varchar,
+  "name" varchar,
+  "room_id" int,
+  "user_id" int,
+  "created_at" timestamp default now()
 );
 
 CREATE TABLE "study"."events" (
@@ -65,8 +68,14 @@ CREATE TABLE "study"."goals" (
   "created_at" timestamp default now(),
   "goal_date" timestamp default null,
   "creator_id" int,
-  "user_ids" json,
   "room_id" int
+);
+
+CREATE TABLE "study"."users/goals" (
+  "id" SERIAL PRIMARY KEY NOT NULL,
+  "user_id" int,
+  "goal_id" int,
+  "created_at" timestamp default now()
 );
 
 ALTER TABLE "study"."rooms" ADD FOREIGN KEY ("topic_id") REFERENCES "study"."topics" ("id");
@@ -74,8 +83,6 @@ ALTER TABLE "study"."rooms" ADD FOREIGN KEY ("topic_id") REFERENCES "study"."top
 ALTER TABLE "study"."messages" ADD FOREIGN KEY ("room_id") REFERENCES "study"."rooms" ("id");
 
 ALTER TABLE "study"."messages" ADD FOREIGN KEY ("user_id") REFERENCES "study"."users" ("id");
-
-ALTER TABLE "study"."messages" ADD FOREIGN KEY ("file_id") REFERENCES "study"."files" ("id");
 
 ALTER TABLE "study"."rooms" ADD FOREIGN KEY ("admin_id") REFERENCES "study"."users" ("id");
 
@@ -91,46 +98,63 @@ ALTER TABLE "study"."users/rooms" ADD FOREIGN KEY ("room_id") REFERENCES "study"
 
 ALTER TABLE "study"."users/rooms" ADD FOREIGN KEY ("user_id") REFERENCES "study"."users" ("id");
 
+ALTER TABLE "study"."users/goals" ADD FOREIGN KEY ("user_id") REFERENCES "study"."users" ("id");
+
+ALTER TABLE "study"."users/goals" ADD FOREIGN KEY ("goal_id") REFERENCES "study"."goals" ("id");
+
+ALTER TABLE "study"."files" ADD FOREIGN KEY ("user_id") REFERENCES "study"."users" ("id");
+
+ALTER TABLE "study"."files" ADD FOREIGN KEY ("room_id") REFERENCES "study"."rooms" ("id");
+
+
 -- to create schema, run:
 -- psql -h localhost -f schema.sql
 -- in terminal
 
 -- change filepath for .csv files below:
 
-COPY "study"."topics"("id", "name", "url")
-FROM '/Users/phitruong/hackreactor/hrlax47/Blue-Ocean/API/mockdata/study.io db - topics.csv'
+COPY "study"."topics"("name", "url")
+FROM '/Users/taite510/work/API/csv/topics.csv'
 DELIMITER ','
 CSV HEADER;
 
-COPY "study"."users"("id", "username", "avatar", "created_at")
-FROM '/Users/phitruong/hackreactor/hrlax47/Blue-Ocean/API/mockdata/study.io db - users.csv'
+COPY "study"."users"("username", "avatar")
+FROM '/Users/taite510/work/API/csv/users.csv'
 DELIMITER ','
 CSV HEADER;
 
-COPY "study"."rooms"("id", "name", "topic_id", "created_at", "thumbnail", "max_users", "is_private", "admin_id", "is_archived")
-FROM '/Users/phitruong/hackreactor/hrlax47/Blue-Ocean/API/mockdata/study.io db - rooms.csv'
+COPY "study"."rooms"("name", "topic_id", "created_at", "thumbnail", "max_users", "is_private", "admin_id", "is_archived")
+FROM '/Users/taite510/work/API/csv/rooms.csv'
 DELIMITER ','
 CSV HEADER;
 
-COPY "study"."users/rooms"("id", "user_id", "room_id", "created_at")
-FROM '/Users/phitruong/hackreactor/hrlax47/Blue-Ocean/API/mockdata/study.io db - users_rooms.csv'
+COPY "study"."users/rooms"("user_id", "room_id")
+FROM '/Users/taite510/work/API/csv/users_rooms.csv'
 DELIMITER ','
 CSV HEADER;
 
-COPY "study"."messages"("id", "room_id", "user_id", "body", "file_id", "created_at")
-FROM '/Users/phitruong/hackreactor/hrlax47/Blue-Ocean/API/mockdata/study.io db - messages.csv'
+COPY "study"."messages"("room_id", "user_id", "body", "created_at")
+FROM '/Users/taite510/work/API/csv/messages.csv'
 DELIMITER ','
 CSV HEADER;
 
-COPY "study"."events"("id", "name", "description", "user_id", "room_id", "created_at", "event_date")
-FROM '/Users/phitruong/hackreactor/hrlax47/Blue-Ocean/API/mockdata/study.io db - events.csv'
+COPY "study"."events"("name", "description", "user_id", "room_id", "created_at", "event_date")
+FROM '/Users/taite510/work/API/csv/events.csv'
 DELIMITER ','
 CSV HEADER;
 
-COPY "study"."goals"("id", "name", "description", "created_at", "goal_date", "creator_id", "user_ids", "room_id")
-FROM '/Users/phitruong/hackreactor/hrlax47/Blue-Ocean/API/mockdata/study.io db - goals.csv'
+COPY "study"."goals"("name", "description", "created_at", "goal_date", "creator_id", "room_id")
+FROM '/Users/taite510/work/API/csv/goals.csv'
 DELIMITER ','
 CSV HEADER;
 
+COPY "study"."users/goals"("user_id", "goal_id")
+FROM '/Users/taite510/work/API/csv/users_goals.csv'
+DELIMITER ','
+CSV HEADER;
 
+COPY "study"."files"("url", "name", "room_id", "user_id")
+FROM '/Users/taite510/work/API/csv/files.csv'
+DELIMITER ','
+CSV HEADER;
 
