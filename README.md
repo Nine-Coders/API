@@ -29,7 +29,7 @@ Due to security concerns, the Postgres connection string is stored in a config.j
 
 ## Documentation
 
-[Quick Start Guide For PostgreSQL](https://chartio.com/resources/tutorials/how-to-start-postgresql-server-on-mac-os-x/)
+[Quick Start Guide For PostgreSQL](https://chartio.com/resources/tutorials/how-to-start-postgresql-server-on-mac-os-x/)  
 [Mock Data](https://docs.google.com/spreadsheets/d/1pP8pmFDK-arZ6Yv5m1dNQe5gDxmmd9VweVFYvMPET-I/edit?usp=sharing)
 
 ## API Reference
@@ -238,7 +238,7 @@ Request body:
 | :-------- | :------- | :-------------------------------- |
 | `name`      | `string` | **Required**. Name of the goal |
 | `description`      | `string` | **Required**. Description of the goal |
-| `goal_date`      | `datetime` | (OPTIONAL) Date of the goal |
+| `goal_date`      | `datetime` | Date of the goal |
 | `creator_id`      | `integer` | **Required**. Id of user who created |
 | `room_id`      | `integer` | **Required**. Id of room the goal b |
 
