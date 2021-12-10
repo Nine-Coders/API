@@ -137,13 +137,17 @@ Response:
 [
     {
       "id": 1,
-      "username": "user1",
+      "first_name": "user1",
+      "last_name": "last name",
+      "email": "email@email.email",
       "avatar": "https://via.placeholder.com/50x50",
       "created_at": "2021-01-13T12:05:06.000Z"
     },
     {
-      "id": 3,
-      "username": "user3",
+      "id": 1,
+      "first_name": "user2",
+      "last_name": "last name",
+      "email": "email@email.email",
       "avatar": "https://via.placeholder.com/50x50",
       "created_at": "2021-01-13T12:05:06.000Z"
     },
@@ -177,7 +181,9 @@ Request body:
 Request body:
 | Parameter | Type     | Description                               |
 | :-------- | :------- | :---------------------------------------- |
-| `username`| `string` | **Required**. username of user            |
+| `first_name`| `string` | **Required**. first name of user            |
+| `last_name`| `string` | **Required**. last name of user            |
+| `email`| `string` | **Required**. email of user            |
 | `avatar`  | `string` | **Required**. url of user's profile photo |
 
 
