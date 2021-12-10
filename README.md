@@ -181,7 +181,9 @@ Request body:
 Request body:
 | Parameter | Type     | Description                               |
 | :-------- | :------- | :---------------------------------------- |
-| `username`| `string` | **Required**. username of user            |
+| `first_name`| `string` | **Required**. first name of user            |
+| `last_name`| `string` | **Required**. last name of user            |
+| `email`| `string` | **Required**. email of user            |
 | `avatar`  | `string` | **Required**. url of user's profile photo |
 
 
@@ -242,9 +244,8 @@ Request body:
 | :-------- | :------- | :-------------------------------- |
 | `name`      | `string` | **Required**. Name of the goal |
 | `description`      | `string` | **Required**. Description of the goal |
-| `goal_date`      | `datetime` | (OPTIONAL) Date of the goal |
-| `creator_id`      | `integer` | **Required**. Id of user who created |
-| `room_id`      | `integer` | **Required**. Id of room the goal b |
+| `goal_date`      | `datetime` | Date of the goal |
+| `user_id`      | `integer` | **Required**. Id of user who created the goal |
 
 #### Toggle a room as archived
 
