@@ -187,7 +187,7 @@ Request body:
 | `avatar`  | `string` | **Required**. url of user's profile photo |
 
 
-#### Create a room in a particlar topic
+#### Create a room in a particular topic
 
 ```http
   POST /rooms/:topic_id/create
@@ -257,3 +257,190 @@ Request body:
 | Parameter | Type     | Description                       |
 | :-------- | :------- | :-------------------------------- |
 | `room_id` | `integer` | **Required**. Id of the room to archive/reactivate |
+
+
+#### Get events for a given room
+
+```http
+  GET /rooms/:room_id/events
+```
+Query parameters:
+| Parameter | Type     | Description                       |
+| :-------- | :------- | :-------------------------------- |
+| `room_id` | `integer` | **Required**. Id of the room to retrieve events from |
+
+```bash
+[
+    {
+        "id": 1,
+        "name": "study session",
+        "description": "we're gonna study",
+        "user_id": 1,
+        "room_id": 1,
+        "created_at": "2021-03-13T12:05:06.000Z",
+        "event_date": "2021-03-14T11:05:06.000Z"
+    },
+    {
+        "id": 2,
+        "name": "study session",
+        "description": "we're gonna study",
+        "user_id": 1,
+        "room_id": 1,
+        "created_at": "2021-03-14T11:05:06.000Z",
+        "event_date": "2021-03-15T11:05:06.000Z"
+    },
+    ...
+]
+```
+
+#### Get goals for a given room
+
+```http
+  GET /rooms/:room_id/goals
+```
+Query parameters:
+| Parameter | Type     | Description                       |
+| :-------- | :------- | :-------------------------------- |
+| `room_id` | `integer` | **Required**. Id of the room to retrive goals from |
+
+```bash
+[
+    {
+        "id": 1,
+        "name": "goal1",
+        "description": "description1",
+        "created_at": "2021-04-13T11:05:06.000Z",
+        "goal_date": "2021-04-15T11:05:06.000Z",
+        "user_id": 1,
+        "room_id": 1,
+        "user_ids": [
+            1
+        ]
+    },
+    {
+        "id": 2,
+        "name": "goal2",
+        "description": "description2",
+        "created_at": "2021-04-14T11:05:06.000Z",
+        "goal_date": "2021-04-16T11:05:06.000Z",
+        "user_id": 1,
+        "room_id": 1,
+        "user_ids": [
+            1
+        ]
+    },
+    ...
+]
+```
+
+#### Add a user to a given goal
+
+```http
+  POST /goals/add-user
+```
+Request body:
+| Parameter | Type     | Description                       |
+| :-------- | :------- | :-------------------------------- |
+| `user_id` | `integer` | **Required**. Id of the user to add to a goal |
+| `goal_id` | `integer` | **Required**. Id of goal receiving a user |
+
+#### Get all files for a given room
+
+```http
+  GET /rooms/:room_id/files
+```
+
+Query parameters:
+| Parameter | Type     | Description                       |
+| :-------- | :------- | :-------------------------------- |
+| `room_id` | `integer` | **Required**. Id of the room to retrieve file URLs from |
+
+```bash
+[
+    {
+        "id": 1,
+        "url": "https://via.placeholder.com/50x50",
+        "name": "placeholder10",
+        "room_id": 1,
+        "user_id": 1,
+        "created_at": "2021-12-11T00:14:49.264Z"
+    },
+    {
+        "id": 5,
+        "url": "https://via.placeholder.com/50x50",
+        "name": "placeholder5",
+        "room_id": 1,
+        "user_id": 2,
+        "created_at": "2021-12-11T00:14:49.264Z"
+    },
+    ...
+]
+```
+
+#### Add a file to a given room
+
+```http
+  POST /rooms/:room_id/files
+```
+
+Query parameters:
+| Parameter | Type     | Description                       |
+| :-------- | :------- | :-------------------------------- |
+| `room_id` | `integer` | **Required**. Id of the room to add file into |
+
+Request Body:
+| Parameter | Type     | Description                       |
+| :-------- | :------- | :-------------------------------- |
+| `url` | `string` | **Required**. Url of the file from file hosting storage |
+| `name` | `string` | **Required**. Name of the file |
+| `user_id` | `string` | **Required**. Id of the user who is posting the file |
+
+#### Removes a file from a given room
+
+```http
+  POST /files/:file_id/delete
+```
+
+Query parameters:
+| Parameter | Type     | Description                       |
+| :-------- | :------- | :-------------------------------- |
+| `file_id` | `integer` | **Required**. Id of the file to delete |
+
+#### Get all rooms for a given user
+
+```http
+  GET /user/:user_id/rooms
+```
+
+Query parameters:
+| Parameter | Type     | Description                       |
+| :-------- | :------- | :-------------------------------- |
+| `user_id` | `integer` | **Required**. Id of the user to retrieve rooms for |
+
+```bash
+[
+    {
+        "id": 1,
+        "name": "the danger zone",
+        "topic_id": 1,
+        "created_at": "2021-01-13T12:05:06.000Z",
+        "thumbnail": "https://via.placeholder.com/200x200",
+        "max_users": 20,
+        "is_private": false,
+        "is_archived": true,
+        "admin_id": 1
+    },
+    {
+        "id": 2,
+        "name": "Tim's Room",
+        "topic_id": 3,
+        "created_at": "2021-01-14T12:05:06.000Z",
+        "thumbnail": "https://via.placeholder.com/200x200",
+        "max_users": 20,
+        "is_private": true,
+        "is_archived": false,
+        "admin_id": 1
+    },
+    ...
+]
+```

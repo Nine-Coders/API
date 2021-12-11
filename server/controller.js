@@ -48,6 +48,23 @@ module.exports = {
       }
     });
   },
+  getRoomsForUser: (userId, cb) => {
+    let queryString = `
+    SELECT study.rooms.*
+    FROM study.rooms
+    LEFT JOIN study."users/rooms"
+    ON study.rooms.id = study."users/rooms".room_id
+    WHERE study."users/rooms".user_id=$1`;
+    let queryParams = [userId];
+    client.query(queryString, queryParams, (err, data) => {
+      if (err) {
+        console.log(err);
+        cb(err);
+      } else {
+        cb(null, data.rows);
+      }
+    });
+  },
   getAllUsers: (roomId, cb) => {
     let queryString = 'SELECT array_agg(user_id::integer) FROM study."users/rooms" WHERE room_id=$1';
     let queryParams = [roomId];
@@ -155,14 +172,21 @@ module.exports = {
     });
   },
   getGoals: (roomId, cb) => {
-    let queryString = 'SELECT * FROM study.goals WHERE room_id=$1';
+    let queryString = `SELECT study.goals.*,
+    array_agg(study."users/goals".user_id::integer)
+    AS user_ids
+    FROM study.goals
+    LEFT JOIN study."users/goals"
+    ON study.goals.id = study."users/goals".goal_id
+    WHERE study.goals.room_id=$1
+    GROUP BY study.goals.id`;
     let queryParams = [roomId];
-    client.query(queryString, queryParams, (err, data) => {
+    client.query(queryString, queryParams, (err, goalsData) => {
       if (err) {
         console.log(err);
         cb(err);
       } else {
-        cb(null, data.rows);
+        cb(null, goalsData.rows)
       }
     });
   },
@@ -175,6 +199,30 @@ module.exports = {
         cb(err);
       } else {
         cb(null, data);
+      }
+    });
+  },
+  addUserToGoal: (data, cb) => {
+    let queryString = 'INSERT INTO study."users/goals" (user_id, goal_id) VALUES($1, $2)';
+    let queryParams = [data.user_id, data.goal_id];
+    client.query(queryString, queryParams, (err, data) => {
+      if (err) {
+        console.log(err);
+        cb(err);
+      } else {
+        cb(null, data);
+      }
+    });
+  },
+  getAllUsersForGoal: (goalId, cb) => {
+    let queryString = 'SELECT * FROM study."users/goals" WHERE goal_id=$1';
+    let queryParams = [goalId];
+    client.query(queryString, queryParams, (err, data) => {
+      if (err) {
+        console.log(err);
+        cb(err);
+      } else {
+        cb(null, data.rows);
       }
     });
   },
