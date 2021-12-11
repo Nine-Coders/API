@@ -123,7 +123,7 @@ module.exports = {
     });
   },
   createUser: (userData, cb) => {
-    let queryString = 'INSERT INTO study.users (first_name, last_name, email, avatar) VALUES($1, $2)';
+    let queryString = 'INSERT INTO study.users (first_name, last_name, email, avatar) VALUES($1, $2, $3, $4)';
     let queryParams = [userData.first_name, userData.last_name, userData.email, userData.avatar];
     client.query(queryString, queryParams, (err, data) => {
       if (err) {
