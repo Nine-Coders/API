@@ -1,7 +1,7 @@
 const express = require('express');
 const app = express();
 const cors = require('cors');
-const port = 5000;
+const port = 3000;
 const db = require('./controller.js')
 
 app.use(cors());
@@ -19,7 +19,17 @@ app.get('/topics', (req, res) => {
 })
 
 app.get('/:topic_id/rooms', (req, res) => {
-  db.getAllRooms(req.params.topic_id, (err, response) => {
+  db.getAllRoomsForTopic(req.params.topic_id, (err, response) => {
+    if (err) {
+      res.send(err)
+    } else {
+      res.send(response)
+    }
+  })
+})
+
+app.get('/rooms', (req, res) => {
+  db.getAllRooms((err, response) => {
     if (err) {
       res.send(err)
     } else {
