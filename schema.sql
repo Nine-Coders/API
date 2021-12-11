@@ -4,79 +4,79 @@ CREATE SCHEMA "study";
 
 CREATE TABLE "study"."topics" (
   "id" SERIAL PRIMARY KEY NOT NULL,
-  "name" varchar,
-  "url" varchar
+  "name" varchar NOT NULL,
+  "url" varchar NOT NULL
 );
 
 CREATE TABLE "study"."rooms" (
   "id" SERIAL PRIMARY KEY NOT NULL,
-  "name" varchar,
-  "topic_id" int,
+  "name" varchar NOT NULL,
+  "topic_id" int NOT NULL,
   "created_at" timestamp default now(),
-  "thumbnail" varchar,
-  "max_users" int,
-  "is_private" boolean,
+  "thumbnail" varchar NOT NULL,
+  "max_users" int NOT NULL,
+  "is_private" boolean NOT NULL,
   "is_archived" boolean default false,
-  "admin_id" int
+  "admin_id" int NOT NULL
 );
 
 CREATE TABLE "study"."messages" (
   "id" SERIAL PRIMARY KEY NOT NULL,
-  "room_id" int,
-  "user_id" int,
-  "body" varchar,
+  "room_id" int NOT NULL,
+  "user_id" int NOT NULL,
+  "body" varchar NOT NULL,
   "created_at" timestamp default now()
 );
 
 CREATE TABLE "study"."users/rooms" (
   "id" SERIAL PRIMARY KEY NOT NULL,
-  "user_id" int,
-  "room_id" int,
+  "user_id" int NOT NULL,
+  "room_id" int NOT NULL,
   "created_at" timestamp default now()
 );
 
 CREATE TABLE "study"."users" (
   "id" SERIAL PRIMARY KEY NOT NULL,
-  "first_name" varchar,
-  "last_name" varchar,
-  "email" varchar,
-  "avatar" varchar,
+  "first_name" varchar NOT NULL,
+  "last_name" varchar NOT NULL,
+  "email" varchar NOT NULL,
+  "avatar" varchar NOT NULL,
   "created_at" timestamp default now()
 );
 
 CREATE TABLE "study"."files" (
   "id" SERIAL PRIMARY KEY NOT NULL,
-  "url" varchar,
-  "name" varchar,
-  "room_id" int,
-  "user_id" int,
+  "url" varchar NOT NULL,
+  "name" varchar NOT NULL,
+  "room_id" int NOT NULL,
+  "user_id" int NOT NULL,
   "created_at" timestamp default now()
 );
 
 CREATE TABLE "study"."events" (
   "id" SERIAL PRIMARY KEY NOT NULL,
-  "name" varchar,
-  "description" varchar,
-  "user_id" int,
-  "room_id" int,
+  "name" varchar NOT NULL,
+  "description" varchar NOT NULL,
+  "user_id" int NOT NULL,
+  "room_id" int NOT NULL,
   "created_at" timestamp default now(),
-  "event_date" timestamp
+  "event_date" timestamp NOT NULL
 );
 
 CREATE TABLE "study"."goals" (
   "id" SERIAL PRIMARY KEY NOT NULL,
-  "name" varchar,
-  "description" varchar,
+  "name" varchar NOT NULL,
+  "description" varchar NOT NULL,
   "created_at" timestamp default now(),
   "goal_date" timestamp default null,
-  "user_id" int,
-  "room_id" int
+  "user_id" int NOT NULL,
+  "room_id" int NOT NULL
 );
 
 CREATE TABLE "study"."users/goals" (
   "id" SERIAL PRIMARY KEY NOT NULL,
-  "user_id" int,
-  "goal_id" int,
+  "user_id" int NOT NULL,
+  "goal_id" int NOT NULL,
   "created_at" timestamp default now()
 );
 

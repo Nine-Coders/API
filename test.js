@@ -35,9 +35,10 @@ test('GET /rooms/:room_id/goals will retrieve all goals for that room', async ()
   await supertest(app).get('/rooms/1/goals')
   .expect(200)
   .then((res) => {
-    expect(res.body.length).toBe(3)
+    expect(res.body.length).toBe(2)
     expect(res.body[0].name).toBe('goal1')
     expect(res.body[0].description).toBe('description1')
+    expect(res.body[0].user_ids[0]).toBe(1)
   });
 });
 

@@ -29,6 +29,7 @@ app.get('/:topic_id/rooms', (req, res) => {
 })
 
 app.get('/rooms/:room_id/messages', (req, res) => {
+  console.log(req.params.room_id)
   db.getAllMessages(req.params.room_id, (err, response) => {
     if (err) {
       res.send(err)
@@ -70,6 +71,26 @@ app.get('/rooms/:room_id/goals', (req, res) => {
 
 app.get('/rooms/:room_id/files', (req, res) => {
   db.getFiles(req.params.room_id, (err, response) => {
+    if (err) {
+      res.send(err)
+    } else {
+      res.send(response)
+    }
+  })
+})
+
+app.get('/goals/:goal_id', (req, res) => {
+  db.getAllUsersForGoal(req.params.goal_id, (err, response) => {
+    if (err) {
+      res.send(err)
+    } else {
+      res.send(response)
+    }
+  })
+})
+
+app.get('/user/:user_id/rooms', (req, res) => {
+  db.getRoomsForUser(req.params.user_id, (err, response) => {
     if (err) {
       res.send(err)
     } else {
@@ -140,6 +161,16 @@ app.post('/rooms/:room_id/goals', (req, res) => {
 
 app.post('/rooms/:room_id/files', (req, res) => {
   db.postFile(req.params.room_id, req.body, (err, response) => {
+    if (err) {
+      res.send(err)
+    } else {
+      res.send(response)
+    }
+  })
+})
+
+app.post('/goals/add-user', (req, res) => {
+  db.addUserToGoal(req.body, (err, response) => {
     if (err) {
       res.send(err)
     } else {
