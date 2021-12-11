@@ -28,7 +28,7 @@ Study IO requires Postgres. To locally load mock data:
 
 ## Documentation
 
-[Quick Start Guide For PostgreSQL](https://chartio.com/resources/tutorials/how-to-start-postgresql-server-on-mac-os-x/)
+[Quick Start Guide For PostgreSQL](https://chartio.com/resources/tutorials/how-to-start-postgresql-server-on-mac-os-x/)<br />
 [Mock Data](https://docs.google.com/spreadsheets/d/1pP8pmFDK-arZ6Yv5m1dNQe5gDxmmd9VweVFYvMPET-I/edit?usp=sharing)
 
 ## API Reference
@@ -52,6 +52,31 @@ Response:
         "id": 2,
         "name": "science",
         "url": "https://via.placeholder.com/200x200"
+    },
+    ...
+]
+```
+
+#### Get all rooms
+
+```http
+  GET /rooms
+```
+
+Response:
+
+```bash
+[
+    {
+        "id": 1,
+        "name": "the danger zone",
+        "topic_id": 1,
+        "created_at": "2021-01-13T12:05:06.000Z",
+        "thumbnail": "https://via.placeholder.com/200x200",
+        "max_users": 20,
+        "is_private": false,
+        "is_archived": true,
+        "admin_id": 1
     },
     ...
 ]

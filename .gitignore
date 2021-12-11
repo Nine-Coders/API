@@ -5,6 +5,8 @@ node_modules/
 config.js
 
 mockdata/
+data/
+
 .DS_Store
 
 ImportData/

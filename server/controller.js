@@ -24,10 +24,21 @@ module.exports = {
       }
     });
   },
-  getAllRooms: (topicId, cb) => {
+  getAllRoomsForTopic: (topicId, cb) => {
     let queryString = 'SELECT * FROM study.rooms WHERE topic_id=$1';
     let queryParams = [topicId];
     client.query(queryString, queryParams, (err, data) => {
+      if (err) {
+        console.log(err);
+        cb(err);
+      } else {
+        cb(null, data.rows);
+      }
+    });
+  },
+  getAllRooms: (cb) => {
+    let queryString = 'SELECT * FROM study.rooms';
+    client.query(queryString, (err, data) => {
       if (err) {
         console.log(err);
         cb(err);
