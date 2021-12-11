@@ -40,6 +40,16 @@ app.get('/rooms', (req, res) => {
   })
 })
 
+app.get('/rooms/search', (req, res) => {
+  db.findRoom(req.body.search_value, (err, response) => {
+    if (err) {
+      res.send(err)
+    } else {
+      res.send(response)
+    }
+  })
+})
+
 app.get('/rooms/:room_id/messages', (req, res) => {
   console.log(req.params.room_id)
   db.getAllMessages(req.params.room_id, (err, response) => {

@@ -116,26 +116,27 @@ ALTER TABLE "study"."files" ADD FOREIGN KEY ("room_id") REFERENCES "study"."room
 -- change filepath for .csv files below:
 
 COPY "study"."topics"("name", "url")
-FROM '/home/edwin/hackreactor/assignments/Blue_Ocean/API/ImportData/topics.csv'
+FROM '/Users/khristianlopez/Hackreactor/SR/BO/new/API/data/topics.csv'
 DELIMITER ','
 CSV HEADER;
 
 COPY "study"."users"("first_name", "last_name", "email", "avatar")
-FROM '/home/edwin/hackreactor/assignments/Blue_Ocean/API/ImportData/users.csv'
+FROM '/Users/khristianlopez/Hackreactor/SR/BO/new/API/data/users.csv'
 DELIMITER ','
 CSV HEADER;
 
 COPY "study"."rooms"("name", "topic_id", "created_at", "thumbnail", "max_users", "is_private", "admin_id", "is_archived")
-FROM '/home/edwin/hackreactor/assignments/Blue_Ocean/API/ImportData/rooms.csv'
+FROM '/Users/khristianlopez/Hackreactor/SR/BO/new/API/data/rooms.csv'
 DELIMITER ','
 CSV HEADER;
+
 
 COPY "study"."users/rooms"("user_id", "room_id")
-FROM '/home/edwin/hackreactor/assignments/Blue_Ocean/API/ImportData/users_rooms.csv'
+FROM '/Users/khristianlopez/Hackreactor/SR/BO/new/API/data/users-rooms.csv'
 DELIMITER ','
 CSV HEADER;
 
-COPY "study"."messages"("room_id", "user_id", "body", "created_at")
+COPY "study"."messages"("room_id", "user_id", "body")
 FROM '/home/edwin/hackreactor/assignments/Blue_Ocean/API/ImportData/messages.csv'
 DELIMITER ','
 CSV HEADER;
@@ -159,4 +160,3 @@ COPY "study"."files"("url", "name", "room_id", "user_id")
 FROM '/home/edwin/hackreactor/assignments/Blue_Ocean/API/ImportData/files.csv'
 DELIMITER ','
 CSV HEADER;
-

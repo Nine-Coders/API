@@ -47,6 +47,18 @@ module.exports = {
       }
     });
   },
+  findRoom: (searchTerm, cb) => {
+    let queryString = `SELECT * FROM study.rooms WHERE name LIKE '%${searchTerm}%'`;
+    //let queryParams = [searchTerm];
+    client.query(queryString, (err, data) => {
+      if (err) {
+        console.log(err);
+        cb(err);
+      } else {
+        cb(null, data.rows);
+      }
+    });
+  },
   getAllMessages: (roomId, cb) => {
     let queryString = 'SELECT * FROM study.messages WHERE room_id=$1';
     let queryParams = [roomId];

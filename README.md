@@ -33,6 +33,7 @@ Study IO requires Postgres. To locally load mock data:
 
 ## API Reference
 
+### TOPICS
 #### Get all topics
 
 ```http
@@ -57,6 +58,7 @@ Response:
 ]
 ```
 
+### ROOMS
 #### Get all rooms
 
 ```http
@@ -107,10 +109,91 @@ Response:
         "is_private": false,
         "is_archived": true,
         "admin_id": 1
-    }
+    },
+    ...
 ]
 ```
 
+#### Search for rooms
+
+```http
+  GET /rooms/search
+```
+
+Request body:
+| Parameter | Type      | Description                                |
+| :-------- | :-------- | :----------------------------------------- |
+| `search_value`| `string` | **Required**. Text to search for rooms (case sensitive)|
+
+Response:
+
+```bash
+[
+    {
+        "id": 10,
+        "name": "the room",
+        "topic_id": 7,
+        "created_at": "2021-01-22T12:05:06.000Z",
+        "thumbnail": "https://via.placeholder.com/200x200",
+        "max_users": 20,
+        "is_private": true,
+        "is_archived": false,
+        "admin_id": 10
+    },
+    {
+        "id": 11,
+        "name": "room1",
+        "topic_id": 1,
+        "created_at": "2021-01-23T12:05:06.000Z",
+        "thumbnail": "https://via.placeholder.com/200x200",
+        "max_users": 20,
+        "is_private": false,
+        "is_archived": false,
+        "admin_id": 1
+    },
+    ...
+]
+```
+
+#### Create a room in a particular topic
+
+```http
+  POST /rooms/:topic_id/create
+```
+
+Request body:
+| Parameter | Type     | Description                       |
+| :-------- | :------- | :-------------------------------- |
+| `name`      | `string` | **Required**. Name of room |
+| `thumbnail`      | `string` | **Required**. URL of thumbnail image |
+| `max_users`      | `integer` | **Required**. Max number of users wanted |
+| `is_private`      | `boolean` | **Required**. Mark room as private |
+| `admin_id`      | `integer` | **Required**. Id of user making the room |
+
+#### Add a user to a particular room
+
+```http
+  POST /addUserToRoom
+```
+
+Request body:
+| Parameter | Type      | Description                       |
+| :-------- | :-------- | :-------------------------------- |
+| `user_id` | `integer` | **Required**. Id of user to add |
+| `room_id` | `integer` | **Required**. Id of room to add user into |
+
+#### Toggle a room as archived
+
+```http
+  PUT /toggle-archive
+```
+
+Request body:
+| Parameter | Type     | Description                       |
+| :-------- | :------- | :-------------------------------- |
+| `room_id` | `integer` | **Required**. Id of the room to archive/reactivate |
+
+### MESSAGES
 #### Get all messages for a particular room
 
 ```http
@@ -144,6 +227,24 @@ Response:
 ]
 ```
 
+#### Post a message to a particular room
+
+```http
+  POST /rooms/:room_id/messages
+```
+
+Query parameters:
+| Parameter | Type      | Description                      |
+| :-------- | :-------- | :------------------------------- |
+| `room_id` | `integer` | **Required**. Id of room |
+
+Request body:
+| Parameter | Type      | Description                      |
+| :-------- | :-------- | :------------------------------- |
+| `user_id` | `integer` | **Required**. Id of user posting |
+| `body`    | `string`  | **Required**. Content of message |
+
+### USERS
 #### Get all users for a particular room
 
 ```http
@@ -179,24 +280,6 @@ Response:
 ]
 ```
 
-#### Post a message to a particular room
-
-```http
-  POST /rooms/:room_id/messages
-```
-
-Query parameters:
-| Parameter | Type      | Description                      |
-| :-------- | :-------- | :------------------------------- |
-| `room_id` | `integer` | **Required**. Id of room |
-
-Request body:
-| Parameter | Type      | Description                      |
-| :-------- | :-------- | :------------------------------- |
-| `user_id` | `integer` | **Required**. Id of user posting |
-| `body`    | `string`  | **Required**. Content of message |
-
-
 #### Create a user
 ```http
   POST /users/create
@@ -211,113 +294,8 @@ Request body:
 | `avatar`  | `string` | **Required**. url of user's profile photo |
 
 
-#### Create a room in a particular topic
-
-```http
-  POST /rooms/:topic_id/create
-```
-
-Request body:
-| Parameter | Type     | Description                       |
-| :-------- | :------- | :-------------------------------- |
-| `name`      | `string` | **Required**. Name of room |
-| `thumbnail`      | `string` | **Required**. URL of thumbnail image |
-| `max_users`      | `integer` | **Required**. Max number of users wanted |
-| `is_private`      | `boolean` | **Required**. Mark room as private |
-| `admin_id`      | `integer` | **Required**. Id of user making the room |
-
-#### Add a user to a particular room
-
-```http
-  POST /addUserToRoom
-```
-
-Request body:
-| Parameter | Type      | Description                       |
-| :-------- | :-------- | :-------------------------------- |
-| `user_id` | `integer` | **Required**. Id of user to add |
-| `room_id` | `integer` | **Required**. Id of room to add user into |
-
-#### Create an event for a particular room
-
-```http
-  POST /rooms/create_event
-```
-
-Request body:
-| Parameter | Type     | Description                       |
-| :-------- | :------- | :-------------------------------- |
-| `name`      | `string` | **Required**. Name of the event |
-| `description`      | `string` | **Required**. Description of the event |
-| `user_id`      | `integer` | **Required**. Id of user who created the event |
-| `room_id`      | `integer` | **Required**. Id of the room where the event was created |
-| `event_date`      | `datetime` | **Required**. Date and time of the event |
-
-#### Create a goal for a particular room
-
-```http
-  POST /rooms/:room_id/goal
-```
-Query parameters:
-| Parameter | Type     | Description                       |
-| :-------- | :------- | :-------------------------------- |
-| `room_id`      | `integer` | **Required**. Id of room the goal belongs to |
-
-Request body:
-| Parameter | Type     | Description                       |
-| :-------- | :------- | :-------------------------------- |
-| `name`      | `string` | **Required**. Name of the goal |
-| `description`      | `string` | **Required**. Description of the goal |
-| `goal_date`      | `datetime` | Date of the goal |
-| `user_id`      | `integer` | **Required**. Id of user who created the goal |
-
-#### Toggle a room as archived
-
-```http
-  PUT /toggle-archive
-```
-
-Request body:
-| Parameter | Type     | Description                       |
-| :-------- | :------- | :-------------------------------- |
-| `room_id` | `integer` | **Required**. Id of the room to archive/reactivate |
-
-
-#### Get events for a given room
-
-```http
-  GET /rooms/:room_id/events
-```
-Query parameters:
-| Parameter | Type     | Description                       |
-| :-------- | :------- | :-------------------------------- |
-| `room_id` | `integer` | **Required**. Id of the room to retrieve events from |
-
-```bash
-[
-    {
-        "id": 1,
-        "name": "study session",
-        "description": "we're gonna study",
-        "user_id": 1,
-        "room_id": 1,
-        "created_at": "2021-03-13T12:05:06.000Z",
-        "event_date": "2021-03-14T11:05:06.000Z"
-    },
-    {
-        "id": 2,
-        "name": "study session",
-        "description": "we're gonna study",
-        "user_id": 1,
-        "room_id": 1,
-        "created_at": "2021-03-14T11:05:06.000Z",
-        "event_date": "2021-03-15T11:05:06.000Z"
-    },
-    ...
-]
-```
-
-#### Get goals for a given room
+### GOALS
+#### Get all goals for a given room
 
 ```http
   GET /rooms/:room_id/goals
@@ -357,6 +335,53 @@ Query parameters:
 ]
 ```
 
+#### Get all users for a particular goal
+
+```http
+  GET /goals/:goal_id
+```
+
+Query parameters:
+| Parameter | Type     | Description                       |
+| :-------- | :------- | :-------------------------------- |
+| `goal_id` | `integer` | **Required**. Id of the goal to retrieve users from |
+
+```bash
+[
+    {
+        "id": 1,
+        "user_id": 1,
+        "goal_id": 1,
+        "created_at": "2021-12-11T18:53:40.272Z"
+    },
+    {
+        "id": 199,
+        "user_id": 199,
+        "goal_id": 1,
+        "created_at": "2021-12-11T18:53:40.272Z"
+    },
+    ...
+]
+```
+
+#### Create a goal for a particular room
+
+```http
+  POST /rooms/:room_id/goal
+```
+Query parameters:
+| Parameter | Type     | Description                       |
+| :-------- | :------- | :-------------------------------- |
+| `room_id`      | `integer` | **Required**. Id of room the goal belongs to |
+
+Request body:
+| Parameter | Type     | Description                       |
+| :-------- | :------- | :-------------------------------- |
+| `name`      | `string` | **Required**. Name of the goal |
+| `description`      | `string` | **Required**. Description of the goal |
+| `goal_date`      | `datetime` | Date of the goal |
+| `user_id`      | `integer` | **Required**. Id of user who created the goal |
+
 #### Add a user to a given goal
 
 ```http
@@ -368,6 +393,57 @@ Request body:
 | `user_id` | `integer` | **Required**. Id of the user to add to a goal |
 | `goal_id` | `integer` | **Required**. Id of goal receiving a user |
 
+### EVENTS
+#### Get all events for a given room
+
+```http
+  GET /rooms/:room_id/events
+```
+Query parameters:
+| Parameter | Type     | Description                       |
+| :-------- | :------- | :-------------------------------- |
+| `room_id` | `integer` | **Required**. Id of the room to retrieve events from |
+
+```bash
+[
+    {
+        "id": 1,
+        "name": "study session",
+        "description": "we're gonna study",
+        "user_id": 1,
+        "room_id": 1,
+        "created_at": "2021-03-13T12:05:06.000Z",
+        "event_date": "2021-03-14T11:05:06.000Z"
+    },
+    {
+        "id": 2,
+        "name": "study session",
+        "description": "we're gonna study",
+        "user_id": 1,
+        "room_id": 1,
+        "created_at": "2021-03-14T11:05:06.000Z",
+        "event_date": "2021-03-15T11:05:06.000Z"
+    },
+    ...
+]
+```
+
+#### Create an event for a particular room
+
+```http
+  POST /rooms/create_event
+```
+
+Request body:
+| Parameter | Type     | Description                       |
+| :-------- | :------- | :-------------------------------- |
+| `name`      | `string` | **Required**. Name of the event |
+| `description`      | `string` | **Required**. Description of the event |
+| `user_id`      | `integer` | **Required**. Id of user who created the event |
+| `room_id`      | `integer` | **Required**. Id of the room where the event was created |
+| `event_date`      | `datetime` | **Required**. Date and time of the event |
+
+### FILES
 #### Get all files for a given room
 
 ```http
@@ -419,7 +495,7 @@ Request Body:
 | `name` | `string` | **Required**. Name of the file |
 | `user_id` | `string` | **Required**. Id of the user who is posting the file |
 
-#### Removes a file from a given room
+#### Remove a file from a given room
 
 ```http
   POST /files/:file_id/delete
@@ -429,42 +505,3 @@ Query parameters:
 | Parameter | Type     | Description                       |
 | :-------- | :------- | :-------------------------------- |
 | `file_id` | `integer` | **Required**. Id of the file to delete |
-
-#### Get all rooms for a given user
-
-```http
-  GET /user/:user_id/rooms
-```
-
-Query parameters:
-| Parameter | Type     | Description                       |
-| :-------- | :------- | :-------------------------------- |
-| `user_id` | `integer` | **Required**. Id of the user to retrieve rooms for |
-
-```bash
-[
-    {
-        "id": 1,
-        "name": "the danger zone",
-        "topic_id": 1,
-        "created_at": "2021-01-13T12:05:06.000Z",
-        "thumbnail": "https://via.placeholder.com/200x200",
-        "max_users": 20,
-        "is_private": false,
-        "is_archived": true,
-        "admin_id": 1
-    },
-    {
-        "id": 2,
-        "name": "Tim's Room",
-        "topic_id": 3,
-        "created_at": "2021-01-14T12:05:06.000Z",
-        "thumbnail": "https://via.placeholder.com/200x200",
-        "max_users": 20,
-        "is_private": true,
-        "is_archived": false,
-        "admin_id": 1
-    },
-    ...
-]
-```
