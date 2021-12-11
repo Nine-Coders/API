@@ -1,6 +1,6 @@
 node_modules/
 
-package-lock.json
+# You should always store package-lock.json
 
 config.js
 
@@ -9,4 +9,4 @@ data/
 
 .DS_Store
 
-csv/
+ImportData/

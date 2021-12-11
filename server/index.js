@@ -1,12 +1,14 @@
 const express = require('express');
 const app = express();
 const cors = require('cors');
-const port = 3000;
+const port = 3001;
 const db = require('./controller.js')
 
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+/*******Get APIs*******/
 
 app.get('/topics', (req, res) => {
   db.getAllTopics((err, response) => {
@@ -18,7 +20,7 @@ app.get('/topics', (req, res) => {
   })
 })
 
-app.get('/:topic_id/rooms', (req, res) => {
+app.get('/topic/:topic_id/rooms', (req, res) => {
   db.getAllRoomsForTopic(req.params.topic_id, (err, response) => {
     if (err) {
       res.send(err)
@@ -108,6 +110,8 @@ app.get('/user/:user_id/rooms', (req, res) => {
     }
   })
 })
+
+/*******Post APIs*******/
 
 app.post('/rooms/:room_id/messages', (req, res) => {
   db.postMessage(req.params.room_id, req.body, (err, response) => {

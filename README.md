@@ -11,6 +11,7 @@ Install the Study IO API dependencies with npm
   cd api
   npm install
 ```
+Due to security concerns, the Postgres connection string is stored in a config.js file that is not provided. Please make a config.js file using the config.example.js file provided.
 
 To start
 
@@ -24,8 +25,6 @@ Study IO requires Postgres. To locally load mock data:
   Change the filepaths in schema.sql to where your locally stored .csv files are
   In your terminal, run psql -h localhost -f schema.sql
 ```
-
-Due to security concerns, the Postgres connection string is stored in a config.js file that is not provided. Please make a config.js file using the config.example.js file provided.
 
 ## Documentation
 
