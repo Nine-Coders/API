@@ -1,10 +1,10 @@
 node_modules/
 
-package-lock.json
+# You should always store package-lock.json
 
 config.js
 
 mockdata/
 .DS_Store
 
-csv/
+ImportData/
