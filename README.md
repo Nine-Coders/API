@@ -158,7 +158,7 @@ Response:
 #### Create a room in a particular topic
 
 ```http
-  POST /rooms/:topic_id/create
+  POST /:topic_id/rooms/create
 ```
 
 Request body:
