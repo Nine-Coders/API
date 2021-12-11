@@ -87,7 +87,7 @@ Response:
 #### Get all rooms for a particular topic
 
 ```http
-  GET /:topic_id/rooms
+  GET /topic/:topic_id/rooms
 ```
 
 Query parameters:
