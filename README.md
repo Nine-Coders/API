@@ -505,3 +505,37 @@ Query parameters:
 | Parameter | Type     | Description                       |
 | :-------- | :------- | :-------------------------------- |
 | `file_id` | `integer` | **Required**. Id of the file to delete |
+
+### Authentication
+#### Verify if user exists and user-provided authentication is correct
+
+```http
+  GET /users/auth
+```
+
+Request Body:
+| Parameter | Type     | Description                       |
+| :-------- | :------- | :-------------------------------- |
+| `email` | `string` | **Required**. Email of the user |
+| `password` | `string` | Password for the user  |
+| `google_id` | `string` | Google ID provided by google authentication |
+
+Note:
+Password OR Google ID can be provided
+
+Response:
+On successful authenthication:
+```bash
+{
+    "id": 307,
+    "first_name": "bobby",
+    "last_name": "hill",
+    "email": "anotherEmail@email.com",
+    "avatar": "https://via.placeholder.com/50x50",
+    "created_at": "2021-12-13T20:04:55.146Z"
+}
+```
+On unsuccessful authentication:
+```bash
+false
+```
