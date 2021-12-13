@@ -367,7 +367,7 @@ Query parameters:
 #### Create a goal for a particular room
 
 ```http
-  POST /rooms/:room_id/goal
+  POST /rooms/:room_id/goals
 ```
 Query parameters:
 | Parameter | Type     | Description                       |
