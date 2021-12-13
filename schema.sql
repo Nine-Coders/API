@@ -116,47 +116,47 @@ ALTER TABLE "study"."files" ADD FOREIGN KEY ("room_id") REFERENCES "study"."room
 -- change filepath for .csv files below:
 
 COPY "study"."topics"("name", "url")
-FROM '/Users/khristianlopez/Hackreactor/SR/BO/new/API/data/topics.csv'
+FROM '/home/ubuntu/API/csv/topics.csv'
 DELIMITER ','
 CSV HEADER;
 
 COPY "study"."users"("first_name", "last_name", "email", "avatar")
-FROM '/Users/khristianlopez/Hackreactor/SR/BO/new/API/data/users.csv'
+FROM '/home/ubuntu/API/csv/users.csv'
 DELIMITER ','
 CSV HEADER;
 
 COPY "study"."rooms"("name", "topic_id", "created_at", "thumbnail", "max_users", "is_private", "admin_id", "is_archived")
-FROM '/Users/khristianlopez/Hackreactor/SR/BO/new/API/data/rooms.csv'
+FROM '/home/ubuntu/API/csv/rooms.csv'
 DELIMITER ','
 CSV HEADER;
 
 
 COPY "study"."users/rooms"("user_id", "room_id")
-FROM '/Users/khristianlopez/Hackreactor/SR/BO/new/API/data/users-rooms.csv'
+FROM '/home/ubuntu/API/csv/users-rooms.csv'
 DELIMITER ','
 CSV HEADER;
 
 COPY "study"."messages"("room_id", "user_id", "body")
-FROM '/home/edwin/hackreactor/assignments/Blue_Ocean/API/ImportData/messages.csv'
+FROM '/home/ubuntu/API/csv/messages.csv'
 DELIMITER ','
 CSV HEADER;
 
 COPY "study"."events"("name", "description", "user_id", "room_id", "created_at", "event_date")
-FROM '/home/edwin/hackreactor/assignments/Blue_Ocean/API/ImportData/events.csv'
+FROM '/home/ubuntu/API/csv/events.csv'
 DELIMITER ','
 CSV HEADER;
 
 COPY "study"."goals"("name", "description", "created_at", "goal_date", "user_id", "room_id")
-FROM '/home/edwin/hackreactor/assignments/Blue_Ocean/API/ImportData/goals.csv'
+FROM '/home/ubuntu/API/csv/goals.csv'
 DELIMITER ','
 CSV HEADER;
 
 COPY "study"."users/goals"("user_id", "goal_id")
-FROM '/home/edwin/hackreactor/assignments/Blue_Ocean/API/ImportData/users_goals.csv'
+FROM '/home/ubuntu/API/csv/users_goals.csv'
 DELIMITER ','
 CSV HEADER;
 
 COPY "study"."files"("url", "name", "room_id", "user_id")
-FROM '/home/edwin/hackreactor/assignments/Blue_Ocean/API/ImportData/files.csv'
+FROM '/home/ubuntu/API/csv/files.csv'
 DELIMITER ','
 CSV HEADER;
