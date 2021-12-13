@@ -214,6 +214,7 @@ module.exports = {
     });
   },
   postGoal: (roomId, goalData, cb) => {
+    if (!goalData.goal_date) { delete goalData.goal_date };
     let queryString = 'INSERT INTO study.goals (name, description, goal_date, user_id, room_id) VALUES($1, $2, $3, $4, $5)';
     let queryParams = [goalData.name, goalData.description, goalData.goal_date, goalData.user_id, roomId];
     client.query(queryString, queryParams, (err, data) => {
