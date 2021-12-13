@@ -121,6 +121,16 @@ app.get('/user/:user_id/rooms', (req, res) => {
   })
 })
 
+app.get('/users/auth', (req, res) => {
+  db.authUser(req.body, (err, response) => {
+    if (err) {
+      res.send(err)
+    } else {
+      res.send(response)
+    }
+  })
+})
+
 /*******Post APIs*******/
 
 app.post('/rooms/:room_id/messages', (req, res) => {

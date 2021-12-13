@@ -39,8 +39,10 @@ CREATE TABLE "study"."users" (
   "id" SERIAL PRIMARY KEY NOT NULL,
   "first_name" varchar NOT NULL,
   "last_name" varchar NOT NULL,
-  "email" varchar NOT NULL,
+  "email" varchar UNIQUE NOT NULL,
   "avatar" varchar NOT NULL,
+  "password" varchar,
+  "google_id" varchar,
   "created_at" timestamp default now()
 );
 
@@ -120,7 +122,7 @@ FROM '/home/ubuntu/API/csv/topics.csv'
 DELIMITER ','
 CSV HEADER;
 
-COPY "study"."users"("first_name", "last_name", "email", "avatar")
+COPY "study"."users"("first_name", "last_name", "email", "avatar", "password", "google_id")
 FROM '/home/ubuntu/API/csv/users.csv'
 DELIMITER ','
 CSV HEADER;
@@ -129,7 +131,6 @@ COPY "study"."rooms"("name", "topic_id", "created_at", "thumbnail", "max_users",
 FROM '/home/ubuntu/API/csv/rooms.csv'
 DELIMITER ','
 CSV HEADER;
-
 
 COPY "study"."users/rooms"("user_id", "room_id")
 FROM '/home/ubuntu/API/csv/users-rooms.csv'

@@ -1,6 +1,6 @@
 const { Client } = require('pg')
+const crypto = require('crypto');
 const connectionString = require('../config.js').connectionString
-
 const client = new Client({
   connectionString,
 })
@@ -88,6 +88,18 @@ module.exports = {
       }
     });
   },
+  getUser: (user, cb) => {
+    let queryString = 'SELECT * FROM study.messages WHERE room_id=$1';
+    let queryParams = [roomId];
+    client.query(queryString, queryParams, (err, data) => {
+      if (err) {
+        console.log(err);
+        cb(err);
+      } else {
+        cb(null, data.rows);
+      }
+    });
+  },
   getAllUsers: (roomId, cb) => {
     let queryString = 'SELECT array_agg(user_id::integer) FROM study."users/rooms" WHERE room_id=$1';
     let queryParams = [roomId];
@@ -98,7 +110,7 @@ module.exports = {
       } else {
         // console.log('data: ', data.rows[0].array_agg); // [ 1, 4 ]
         let usersString = JSON.stringify(data.rows[0].array_agg)
-        let altQueryString = `SELECT * FROM study.users WHERE id=ANY(ARRAY${usersString})`;
+        let altQueryString = `SELECT id, first_name, last_name, email, avatar, created_at FROM study.users WHERE id=ANY(ARRAY${usersString})`;
         client.query(altQueryString, (err, userData) => {
           if (err) {
             console.log(err)
@@ -123,16 +135,69 @@ module.exports = {
     });
   },
   createUser: (userData, cb) => {
-    let queryString = 'INSERT INTO study.users (first_name, last_name, email, avatar) VALUES($1, $2, $3, $4)';
-    let queryParams = [userData.first_name, userData.last_name, userData.email, userData.avatar];
-    client.query(queryString, queryParams, (err, data) => {
-      if (err) {
-        console.log(err);
-        cb(err);
+    if (userData.password || userData.googleId) {
+      const salt = crypto.randomBytes(16).toString('hex');
+      crypto.scrypt((userData.password || userData.googleId), salt, 64, (err, derivedKey) => {
+        if (err) {
+          cb(err);
+        } else {
+          let encrypted = salt + ':' + derivedKey.toString('hex');
+          let queryString;
+          if (userData.password) {
+            queryString = 'INSERT INTO study.users (first_name, last_name, email, avatar, password) VALUES($1, $2, $3, $4, $5)';
+          } else {
+            queryString = 'INSERT INTO study.users (first_name, last_name, email, avatar, google_id) VALUES($1, $2, $3, $4, $5)';
+          }
+          let queryParams = [userData.first_name, userData.last_name, userData.email, userData.avatar, encrypted];
+          client.query(queryString, queryParams, (err, data) => {
+            if (err) {
+              console.log(err);
+              cb(err);
+            } else {
+              cb(null, data);
+            }
+          });
+        }
+      })
+    } else {
+      cb('password or googleId was not provided')
+    }
+  },
+  authUser: (authData, cb) => {
+    if (authData.password || authData.googleId) {
+      let encryptedQuery;
+      if (authData.password) {
+        encryptedQuery = 'SELECT id, first_name, last_name, email, avatar, created_at, password  FROM study.users WHERE email=$1'
       } else {
-        cb(null, data);
+        encryptedQuery = 'SELECT id, first_name, last_name, email, avatar, created_at, google_id FROM study.users WHERE email=$1'
       }
-    });
+      let queryParams = [authData.email];
+      client.query(encryptedQuery, queryParams, (err, data) => {
+        if (err) {
+          console.log(err);
+          cb(err);
+        } else {
+          if (data.rows[0]) {
+            const [salt, key] = (data.rows[0].password || data.rows[0].google_id).split(":");
+            crypto.scrypt((authData.password || authData.googleId), salt, 64, (err, derivedKey) => {
+              if (err) {
+                cb(err);
+              } else {
+                if (key === derivedKey.toString('hex')) {
+                  delete data.rows[0].password;
+                  delete data.rows[0].google_id;
+                  cb(null, data.rows[0])
+                } else {
+                  cb(null, false);
+                }
+              }
+            })
+          } else {
+            cb(null, false);
+          }
+        }
+      });
+    }
   },
   createRoom: (topicId, roomData, cb) => {
     let queryString = 'INSERT INTO study.rooms (name, topic_id, thumbnail, max_users, is_private, admin_id) VALUES($1, $2, $3, $4, $5, $6)';
