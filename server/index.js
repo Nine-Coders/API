@@ -239,6 +239,25 @@ app.put('/files/:file_id/delete', (req, res) => {
   })
 })
 
+app.put('/rooms/new-invite-key', (req, res) => {
+  db.changeInviteKey(req.body, (err, response) => {
+    if (err) {
+      res.send(err)
+    } else {
+      res.send(response)
+    }
+  })
+})
+
+app.post('/rooms/check-invite-key', (req, res) => {
+  db.addFromInviteKey(req.body, (err, response) => {
+    if (err) {
+      res.send(err)
+    } else {
+      res.send(response)
+    }
+  })
+})
 
 app.listen(port, () => {
   console.log(`listening on port ${port}`);
