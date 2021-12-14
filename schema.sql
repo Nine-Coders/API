@@ -118,46 +118,46 @@ ALTER TABLE "study"."files" ADD FOREIGN KEY ("room_id") REFERENCES "study"."room
 -- change filepath for .csv files below:
 
 COPY "study"."topics"("name", "url")
-FROM '/Users/phitruong/hackreactor/hrlax47/Blue-Ocean/API/mockdata/topics.csv'
+FROM '/homme/ubuntu/API/csv/topics.csv'
 DELIMITER ','
 CSV HEADER;
 
 COPY "study"."users"("first_name", "last_name", "email", "avatar", "password", "google_id")
-FROM '/Users/phitruong/hackreactor/hrlax47/Blue-Ocean/API/mockdata/users.csv'
+FROM '/homme/ubuntu/API/csv/users.csv'
 DELIMITER ','
 CSV HEADER;
 
 COPY "study"."rooms"("id", "name", "topic_id", "created_at", "thumbnail", "max_users", "is_private", "admin_id", "is_archived")
-FROM '/Users/phitruong/hackreactor/hrlax47/Blue-Ocean/API/mockdata/rooms.csv'
+FROM '/homme/ubuntu/API/csv/rooms.csv'
 DELIMITER ','
 CSV HEADER;
 
 COPY "study"."users/rooms"("user_id", "room_id")
-FROM '/Users/phitruong/hackreactor/hrlax47/Blue-Ocean/API/mockdata/users_rooms.csv'
+FROM '/homme/ubuntu/API/csv/users_rooms.csv'
 DELIMITER ','
 CSV HEADER;
 
 COPY "study"."messages"("room_id", "user_id", "body")
-FROM '/Users/phitruong/hackreactor/hrlax47/Blue-Ocean/API/mockdata/messages.csv'
+FROM '/homme/ubuntu/API/csv/messages.csv'
 DELIMITER ','
 CSV HEADER;
 
 COPY "study"."events"("name", "user_id", "room_id", "created_at", "event_date", "event_time")
-FROM '/Users/phitruong/hackreactor/hrlax47/Blue-Ocean/API/mockdata/events.csv'
+FROM '/homme/ubuntu/API/csv/events.csv'
 DELIMITER ','
 CSV HEADER;
 
 COPY "study"."goals"("name", "description", "created_at", "user_id", "room_id")
-FROM '/Users/phitruong/hackreactor/hrlax47/Blue-Ocean/API/mockdata/goals.csv'
+FROM '/homme/ubuntu/API/csv/goals.csv'
 DELIMITER ','
 CSV HEADER;
 
 COPY "study"."users/goals"("user_id", "goal_id")
-FROM '/Users/phitruong/hackreactor/hrlax47/Blue-Ocean/API/mockdata/users_goals.csv'
+FROM '/homme/ubuntu/API/csv/users_goals.csv'
 DELIMITER ','
 CSV HEADER;
 
 COPY "study"."files"("url", "name", "room_id", "user_id")
-FROM '/Users/phitruong/hackreactor/hrlax47/Blue-Ocean/API/mockdata/files.csv'
+FROM '/homme/ubuntu/API/csv/files.csv'
 DELIMITER ','
 CSV HEADER;
