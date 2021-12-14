@@ -40,18 +40,7 @@ app.get('/rooms', (req, res) => {
   })
 })
 
-app.get('/rooms/search', (req, res) => {
-  db.findRoom(req.body.search_value, (err, response) => {
-    if (err) {
-      res.send(err)
-    } else {
-      res.send(response)
-    }
-  })
-})
-
 app.get('/rooms/:room_id/messages', (req, res) => {
-  console.log(req.params.room_id)
   db.getAllMessages(req.params.room_id, (err, response) => {
     if (err) {
       res.send(err)
@@ -70,6 +59,7 @@ app.get('/rooms/:room_id/users', (req, res) => {
     }
   })
 })
+
 
 app.get('/rooms/:room_id/events', (req, res) => {
   db.getEvents(req.params.room_id, (err, response) => {
@@ -121,15 +111,6 @@ app.get('/user/:user_id/rooms', (req, res) => {
   })
 })
 
-app.get('/users/auth', (req, res) => {
-  db.authUser(req.body, (err, response) => {
-    if (err) {
-      res.send(err)
-    } else {
-      res.send(response)
-    }
-  })
-})
 
 /*******Post APIs*******/
 
@@ -153,6 +134,16 @@ app.post('/users/create', (req, res) => {
   })
 })
 
+app.post('/users/auth', (req, res) => {
+  db.authUser(req.body, (err, response) => {
+    if (err) {
+      res.send(err)
+    } else {
+      res.send(response)
+    }
+  })
+})
+
 app.post('/:topic_id/rooms/create', (req, res) => {
   db.createRoom(req.params.topic_id, req.body, (err, response) => {
     if (err) {
@@ -165,6 +156,16 @@ app.post('/:topic_id/rooms/create', (req, res) => {
 
 app.post('/addUserToRoom', (req, res) => {
   db.addUserToRoom(req.body, (err, response) => {
+    if (err) {
+      res.send(err)
+    } else {
+      res.send(response)
+    }
+  })
+})
+
+app.post('/rooms/search', (req, res) => {
+  db.findRoom(req.body.search_value, (err, response) => {
     if (err) {
       res.send(err)
     } else {

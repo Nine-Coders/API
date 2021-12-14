@@ -117,7 +117,7 @@ Response:
 #### Search for rooms
 
 ```http
-  GET /rooms/search
+  POST /rooms/search
 ```
 
 Request body:
@@ -510,7 +510,7 @@ Query parameters:
 #### Verify if user exists and user-provided authentication is correct
 
 ```http
-  GET /users/auth
+  POST /users/auth
 ```
 
 Request Body:
