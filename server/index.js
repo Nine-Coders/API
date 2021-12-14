@@ -3,7 +3,9 @@ const app = express();
 const cors = require('cors');
 const port = 3001;
 const db = require('./controller.js')
+const morgan = require('morgan');
 
+app.use(morgan('dev'));
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
