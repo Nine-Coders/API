@@ -291,8 +291,11 @@ Request body:
 | `first_name`| `string` | **Required**. first name of user            |
 | `last_name`| `string` | **Required**. last name of user            |
 | `email`| `string` | **Required**. email of user            |
-| `avatar`  | `string` | **Required**. url of user's profile photo |
+| `avatar`  | `string` | url of user's profile photo |
+| `password`  | `string` | user's password |
+| `googleId`  | `string` | user's googleId |
 
+Note: needs a password OR googleId to create a user
 
 ### GOALS
 #### Get all goals for a given room

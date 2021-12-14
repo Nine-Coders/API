@@ -9,7 +9,7 @@ CREATE TABLE "study"."topics" (
 );
 
 CREATE TABLE "study"."rooms" (
-  "id" SERIAL PRIMARY KEY NOT NULL,
+  "id" varchar PRIMARY KEY NOT NULL,
   "name" varchar NOT NULL,
   "topic_id" int NOT NULL,
   "created_at" timestamp default now(),
@@ -22,7 +22,7 @@ CREATE TABLE "study"."rooms" (
 
 CREATE TABLE "study"."messages" (
   "id" SERIAL PRIMARY KEY NOT NULL,
-  "room_id" int NOT NULL,
+  "room_id" varchar NOT NULL,
   "user_id" int NOT NULL,
   "body" varchar NOT NULL,
   "created_at" timestamp default now()
@@ -31,7 +31,7 @@ CREATE TABLE "study"."messages" (
 CREATE TABLE "study"."users/rooms" (
   "id" SERIAL PRIMARY KEY NOT NULL,
   "user_id" int NOT NULL,
-  "room_id" int NOT NULL,
+  "room_id" varchar NOT NULL,
   "created_at" timestamp default now()
 );
 
@@ -40,7 +40,7 @@ CREATE TABLE "study"."users" (
   "first_name" varchar NOT NULL,
   "last_name" varchar NOT NULL,
   "email" varchar UNIQUE NOT NULL,
-  "avatar" varchar NOT NULL,
+  "avatar" varchar NOT NULL default 'https://via.placeholder.com/100x100',
   "password" varchar,
   "google_id" varchar,
   "created_at" timestamp default now()
@@ -50,7 +50,7 @@ CREATE TABLE "study"."files" (
   "id" SERIAL PRIMARY KEY NOT NULL,
   "url" varchar NOT NULL,
   "name" varchar NOT NULL,
-  "room_id" int NOT NULL,
+  "room_id" varchar NOT NULL,
   "user_id" int NOT NULL,
   "created_at" timestamp default now()
 );
@@ -60,7 +60,7 @@ CREATE TABLE "study"."events" (
   "name" varchar NOT NULL,
   "description" varchar NOT NULL,
   "user_id" int NOT NULL,
-  "room_id" int NOT NULL,
+  "room_id" varchar NOT NULL,
   "created_at" timestamp default now(),
   "event_date" timestamp NOT NULL
 );
@@ -72,7 +72,7 @@ CREATE TABLE "study"."goals" (
   "created_at" timestamp default now(),
   "goal_date" timestamp default null,
   "user_id" int NOT NULL,
-  "room_id" int NOT NULL
+  "room_id" varchar NOT NULL
 );
 
 CREATE TABLE "study"."users/goals" (
@@ -127,13 +127,13 @@ FROM '/home/ubuntu/API/csv/users.csv'
 DELIMITER ','
 CSV HEADER;
 
-COPY "study"."rooms"("name", "topic_id", "created_at", "thumbnail", "max_users", "is_private", "admin_id", "is_archived")
+COPY "study"."rooms"("id", "name", "topic_id", "created_at", "thumbnail", "max_users", "is_private", "admin_id", "is_archived")
 FROM '/home/ubuntu/API/csv/rooms.csv'
 DELIMITER ','
 CSV HEADER;
 
 COPY "study"."users/rooms"("user_id", "room_id")
-FROM '/home/ubuntu/API/csv/users-rooms.csv'
+FROM '/home/ubuntu/API/csv/users_rooms.csv'
 DELIMITER ','
 CSV HEADER;
 

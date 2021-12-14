@@ -1,5 +1,6 @@
-const { Client } = require('pg')
+const { Client } = require('pg');
 const crypto = require('crypto');
+const { nanoid } = require('nanoid');
 const connectionString = require('../config.js').connectionString
 const client = new Client({
   connectionString,
@@ -60,7 +61,7 @@ module.exports = {
     });
   },
   getAllMessages: (roomId, cb) => {
-    let queryString = 'SELECT * FROM study.messages WHERE room_id=$1';
+    let queryString = 'SELECT study.messages.*, study.users.first_name, study.users.last_name FROM study.messages LEFT JOIN study.users ON study.users.id = study.messages.user_id WHERE room_id=$1';
     let queryParams = [roomId];
     client.query(queryString, queryParams, (err, data) => {
       if (err) {
@@ -200,8 +201,10 @@ module.exports = {
     }
   },
   createRoom: (topicId, roomData, cb) => {
-    let queryString = 'INSERT INTO study.rooms (name, topic_id, thumbnail, max_users, is_private, admin_id) VALUES($1, $2, $3, $4, $5, $6)';
-    let queryParams = [roomData.name, topicId, roomData.thumbnail, roomData.max_users, roomData.is_private, roomData.admin_id];
+    let uid = nanoid(10);
+    console.log(uid)
+    let queryString = 'INSERT INTO study.rooms (id, name, topic_id, thumbnail, max_users, is_private, admin_id) VALUES($1, $2, $3, $4, $5, $6, $7)';
+    let queryParams = [uid, roomData.name, topicId, roomData.thumbnail, roomData.max_users, roomData.is_private, roomData.admin_id];
     client.query(queryString, queryParams, (err, data) => {
       if (err) {
         console.log(err);
