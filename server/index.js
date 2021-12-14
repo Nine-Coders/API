@@ -10,6 +10,10 @@ app.use(express.urlencoded({ extended: true }));
 
 /*******Get APIs*******/
 
+app.get('/loaderio-b1411d2df4f27707436a5bf39c3ad836', (req, res) => {
+  res.send('loaderio-b1411d2df4f27707436a5bf39c3ad836');
+})
+
 app.get('/topics', (req, res) => {
   db.getAllTopics((err, response) => {
     if (err) {
@@ -110,7 +114,6 @@ app.get('/user/:user_id/rooms', (req, res) => {
     }
   })
 })
-
 
 /*******Post APIs*******/
 
