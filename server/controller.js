@@ -354,5 +354,28 @@ module.exports = {
       }
     });
   },
-
+  changeInviteKey: (roomData, cb) => {
+    let queryString = 'UPDATE study.rooms SET invite_key = $1 WHERE id=$2';
+    let queryParams = [roomData.invite_key, roomData.room_id];
+    client.query(queryString, queryParams, (err, data) => {
+      if (err) {
+        console.log(err);
+        cb(err);
+      } else {
+        cb(null, data);
+      }
+    });
+  },
+  addFromInviteKey: (roomData, cb) => {
+    let queryString = 'SELECT EXISTS(SELECT 1 from study.rooms WHERE id = $1 and invite_key = $2)';
+    let queryParams = [roomData.room_id, roomData.invite_key];
+    client.query(queryString, queryParams, (err, data) => {
+      if (err) {
+        console.log(err);
+        cb(err);
+      } else {
+        cb(null, data.rows[0]['exists']);
+      }
+    });
+  },
 }

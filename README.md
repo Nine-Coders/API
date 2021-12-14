@@ -193,6 +193,34 @@ Request body:
 | :-------- | :------- | :-------------------------------- |
 | `room_id` | `string` | **Required**. Id of the room to archive/reactivate |
 
+#### Adds or updates invite key for room
+
+```http
+  PUT /rooms/new-invite-key
+```
+
+Request body:
+| Parameter | Type     | Description                       |
+| :-------- | :------- | :-------------------------------- |
+| `room_id` | `string` | **Required**. Id of the room to generate an invite key for |
+| `invite_key` | `string` | **Required**. Invite key to room |
+
+#### Verify if invite key is for a particular room
+
+```http
+  POST /rooms/new-invite-key
+```
+
+Request body:
+| Parameter | Type     | Description                       |
+| :-------- | :------- | :-------------------------------- |
+| `room_id` | `string` | **Required**. Id of the room to generate an invite key for |
+| `invite_key` | `string` | **Required**. Invite key to room |
+
+Responses:
+```true``` if invite key matches
+```false``` if not
+
 ### MESSAGES
 #### Get all messages for a particular room
 
@@ -331,11 +359,10 @@ Query parameters:
         "name": "goal101",
         "description": "description101",
         "created_at": "2021-07-22T04:05:06.000Z",
-        "goal_date": "2021-07-24T04:05:06.000Z",
         "user_id": 101,
         "room_id": "hJ_Q0GG000",
         "user_ids": [
-            null
+            101
         ]
     },
     ...
@@ -418,8 +445,9 @@ Query parameters:
         "user_id": 1,
         "room_id": "hJ_Q0GG000",
         "created_at": "2021-03-13T04:05:06.000Z",
-        "event_date": "2021-03-14T04:05:06.000Z"
-    }
+        "event_date": "2021-03-14T00:00:00.000Z",
+        "event_time": "11:00:00"
+    },
     ...
 ]
 ```

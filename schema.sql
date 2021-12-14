@@ -17,7 +17,8 @@ CREATE TABLE "study"."rooms" (
   "max_users" int NOT NULL,
   "is_private" boolean NOT NULL,
   "is_archived" boolean default false,
-  "admin_id" int NOT NULL
+  "admin_id" int NOT NULL,
+  "invite_key" varchar
 );
 
 CREATE TABLE "study"."messages" (
