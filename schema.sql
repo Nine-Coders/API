@@ -17,7 +17,8 @@ CREATE TABLE "study"."rooms" (
   "max_users" int NOT NULL,
   "is_private" boolean NOT NULL,
   "is_archived" boolean default false,
-  "admin_id" int NOT NULL
+  "admin_id" int NOT NULL,
+  "invite_key" varchar
 );
 
 CREATE TABLE "study"."messages" (
@@ -58,11 +59,11 @@ CREATE TABLE "study"."files" (
 CREATE TABLE "study"."events" (
   "id" SERIAL PRIMARY KEY NOT NULL,
   "name" varchar NOT NULL,
-  "description" varchar NOT NULL,
   "user_id" int NOT NULL,
   "room_id" varchar NOT NULL,
   "created_at" timestamp default now(),
-  "event_date" timestamp NOT NULL
+  "event_date" date NOT NULL,
+  "event_time" time NOT NULL
 );
 
 CREATE TABLE "study"."goals" (
@@ -70,7 +71,6 @@ CREATE TABLE "study"."goals" (
   "name" varchar NOT NULL,
   "description" varchar NOT NULL,
   "created_at" timestamp default now(),
-  "goal_date" timestamp default null,
   "user_id" int NOT NULL,
   "room_id" varchar NOT NULL
 );
@@ -142,12 +142,12 @@ FROM '/home/ubuntu/API/csv/messages.csv'
 DELIMITER ','
 CSV HEADER;
 
-COPY "study"."events"("name", "description", "user_id", "room_id", "created_at", "event_date")
+COPY "study"."events"("name", "user_id", "room_id", "created_at", "event_date", "event_time")
 FROM '/home/ubuntu/API/csv/events.csv'
 DELIMITER ','
 CSV HEADER;
 
-COPY "study"."goals"("name", "description", "created_at", "goal_date", "user_id", "room_id")
+COPY "study"."goals"("name", "description", "created_at", "user_id", "room_id")
 FROM '/home/ubuntu/API/csv/goals.csv'
 DELIMITER ','
 CSV HEADER;

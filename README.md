@@ -70,7 +70,7 @@ Response:
 ```bash
 [
     {
-        "id": 1,
+        "id": "hJ_Q0GG000",
         "name": "the danger zone",
         "topic_id": 1,
         "created_at": "2021-01-13T12:05:06.000Z",
@@ -180,7 +180,7 @@ Request body:
 | Parameter | Type      | Description                       |
 | :-------- | :-------- | :-------------------------------- |
 | `user_id` | `integer` | **Required**. Id of user to add |
-| `room_id` | `integer` | **Required**. Id of room to add user into |
+| `room_id` | `string` | **Required**. Id of room to add user into |
 
 #### Toggle a room as archived
 
@@ -191,7 +191,35 @@ Request body:
 Request body:
 | Parameter | Type     | Description                       |
 | :-------- | :------- | :-------------------------------- |
-| `room_id` | `integer` | **Required**. Id of the room to archive/reactivate |
+| `room_id` | `string` | **Required**. Id of the room to archive/reactivate |
+
+#### Adds or updates invite key for room
+
+```http
+  PUT /rooms/new-invite-key
+```
+
+Request body:
+| Parameter | Type     | Description                       |
+| :-------- | :------- | :-------------------------------- |
+| `room_id` | `string` | **Required**. Id of the room to generate an invite key for |
+| `invite_key` | `string` | **Required**. Invite key to room |
+
+#### Verify if invite key is for a particular room
+
+```http
+  POST /rooms/new-invite-key
+```
+
+Request body:
+| Parameter | Type     | Description                       |
+| :-------- | :------- | :-------------------------------- |
+| `room_id` | `string` | **Required**. Id of the room to generate an invite key for |
+| `invite_key` | `string` | **Required**. Invite key to room |
+
+Responses:
+```true``` if invite key matches
+```false``` if not
 
 ### MESSAGES
 #### Get all messages for a particular room
@@ -203,7 +231,7 @@ Request body:
 Query parameters:
 | Parameter | Type      | Description                                  |
 | :-------- | :-------- | :------------------------------------------- |
-| `room_id` | `integer` | **Required**. Id of room to get messages for |
+| `room_id` | `string` | **Required**. Id of room to get messages for |
 
 Response:
 
@@ -211,17 +239,21 @@ Response:
 [
     {
         "id": 1,
-        "room_id": 1,
+        "room_id": "hJ_Q0GG000",
         "user_id": 1,
         "body": "testing",
-        "created_at": "2021-02-13T12:05:06.000Z"
+        "created_at": "2021-12-14T20:02:41.634Z",
+        "first_name": "user1",
+        "last_name": "last name"
     },
     {
-        "id": 3,
-        "room_id": 1,
-        "user_id": 3,
-        "body": "hello world",
-        "created_at": "2021-02-15T12:05:06.000Z"
+        "id": 101,
+        "room_id": "hJ_Q0GG000",
+        "user_id": 101,
+        "body": "what?",
+        "created_at": "2021-12-14T20:02:41.634Z",
+        "first_name": "user101",
+        "last_name": "last name"
     },
     ...
 ]
@@ -236,7 +268,7 @@ Response:
 Query parameters:
 | Parameter | Type      | Description                      |
 | :-------- | :-------- | :------------------------------- |
-| `room_id` | `integer` | **Required**. Id of room |
+| `room_id` | `string` | **Required**. Id of room |
 
 Request body:
 | Parameter | Type      | Description                      |
@@ -254,7 +286,7 @@ Request body:
 Query parameters:
 | Parameter | Type      | Description                               |
 | :-------- | :-------- | :---------------------------------------- |
-| `room_id` | `integer` | **Required**. Id of room to get users for |
+| `room_id` | `string` | **Required**. Id of room to get users for |
 
 Response:
 
@@ -306,7 +338,7 @@ Note: needs a password OR googleId to create a user
 Query parameters:
 | Parameter | Type     | Description                       |
 | :-------- | :------- | :-------------------------------- |
-| `room_id` | `integer` | **Required**. Id of the room to retrive goals from |
+| `room_id` | `string` | **Required**. Id of the room to retrive goals from |
 
 ```bash
 [
@@ -314,24 +346,23 @@ Query parameters:
         "id": 1,
         "name": "goal1",
         "description": "description1",
-        "created_at": "2021-04-13T11:05:06.000Z",
-        "goal_date": "2021-04-15T11:05:06.000Z",
+        "created_at": "2021-04-13T04:05:06.000Z",
         "user_id": 1,
-        "room_id": 1,
+        "room_id": "hJ_Q0GG000",
         "user_ids": [
-            1
+            1,
+            199
         ]
     },
     {
-        "id": 2,
-        "name": "goal2",
-        "description": "description2",
-        "created_at": "2021-04-14T11:05:06.000Z",
-        "goal_date": "2021-04-16T11:05:06.000Z",
-        "user_id": 1,
-        "room_id": 1,
+        "id": 101,
+        "name": "goal101",
+        "description": "description101",
+        "created_at": "2021-07-22T04:05:06.000Z",
+        "user_id": 101,
+        "room_id": "hJ_Q0GG000",
         "user_ids": [
-            1
+            101
         ]
     },
     ...
@@ -375,14 +406,13 @@ Query parameters:
 Query parameters:
 | Parameter | Type     | Description                       |
 | :-------- | :------- | :-------------------------------- |
-| `room_id`      | `integer` | **Required**. Id of room the goal belongs to |
+| `room_id`      | `string` | **Required**. Id of room the goal belongs to |
 
 Request body:
 | Parameter | Type     | Description                       |
 | :-------- | :------- | :-------------------------------- |
 | `name`      | `string` | **Required**. Name of the goal |
 | `description`      | `string` | **Required**. Description of the goal |
-| `goal_date`      | `datetime` | Date of the goal |
 | `user_id`      | `integer` | **Required**. Id of user who created the goal |
 
 #### Add a user to a given goal
@@ -405,27 +435,18 @@ Request body:
 Query parameters:
 | Parameter | Type     | Description                       |
 | :-------- | :------- | :-------------------------------- |
-| `room_id` | `integer` | **Required**. Id of the room to retrieve events from |
+| `room_id` | `string` | **Required**. Id of the room to retrieve events from |
 
 ```bash
 [
     {
         "id": 1,
         "name": "study session",
-        "description": "we're gonna study",
         "user_id": 1,
-        "room_id": 1,
-        "created_at": "2021-03-13T12:05:06.000Z",
-        "event_date": "2021-03-14T11:05:06.000Z"
-    },
-    {
-        "id": 2,
-        "name": "study session",
-        "description": "we're gonna study",
-        "user_id": 1,
-        "room_id": 1,
-        "created_at": "2021-03-14T11:05:06.000Z",
-        "event_date": "2021-03-15T11:05:06.000Z"
+        "room_id": "hJ_Q0GG000",
+        "created_at": "2021-03-13T04:05:06.000Z",
+        "event_date": "2021-03-14T00:00:00.000Z",
+        "event_time": "11:00:00"
     },
     ...
 ]
@@ -441,10 +462,10 @@ Request body:
 | Parameter | Type     | Description                       |
 | :-------- | :------- | :-------------------------------- |
 | `name`      | `string` | **Required**. Name of the event |
-| `description`      | `string` | **Required**. Description of the event |
 | `user_id`      | `integer` | **Required**. Id of user who created the event |
-| `room_id`      | `integer` | **Required**. Id of the room where the event was created |
-| `event_date`      | `datetime` | **Required**. Date and time of the event |
+| `room_id`      | `string` | **Required**. Id of the room where the event was created |
+| `event_date`      | `date` | **Required**. Date of the event |
+| `event_time`      | `time` | **Required**. Time of the event |
 
 ### FILES
 #### Get all files for a given room
@@ -456,26 +477,18 @@ Request body:
 Query parameters:
 | Parameter | Type     | Description                       |
 | :-------- | :------- | :-------------------------------- |
-| `room_id` | `integer` | **Required**. Id of the room to retrieve file URLs from |
+| `room_id` | `string` | **Required**. Id of the room to retrieve file URLs from |
 
 ```bash
 [
     {
         "id": 1,
         "url": "https://via.placeholder.com/50x50",
-        "name": "placeholder10",
-        "room_id": 1,
+        "name": "placeholder1",
+        "room_id": "hJ_Q0GG000",
         "user_id": 1,
-        "created_at": "2021-12-11T00:14:49.264Z"
-    },
-    {
-        "id": 5,
-        "url": "https://via.placeholder.com/50x50",
-        "name": "placeholder5",
-        "room_id": 1,
-        "user_id": 2,
-        "created_at": "2021-12-11T00:14:49.264Z"
-    },
+        "created_at": "2021-12-14T20:02:41.665Z"
+    }
     ...
 ]
 ```
@@ -489,7 +502,7 @@ Query parameters:
 Query parameters:
 | Parameter | Type     | Description                       |
 | :-------- | :------- | :-------------------------------- |
-| `room_id` | `integer` | **Required**. Id of the room to add file into |
+| `room_id` | `string` | **Required**. Id of the room to add file into |
 
 Request Body:
 | Parameter | Type     | Description                       |
@@ -521,7 +534,7 @@ Request Body:
 | :-------- | :------- | :-------------------------------- |
 | `email` | `string` | **Required**. Email of the user |
 | `password` | `string` | Password for the user  |
-| `google_id` | `string` | Google ID provided by google authentication |
+| `googleId` | `string` | Google ID provided by google authentication |
 
 Note:
 Password OR Google ID can be provided

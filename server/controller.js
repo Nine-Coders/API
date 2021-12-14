@@ -227,8 +227,8 @@ module.exports = {
     });
   },
   postEvent: (eventData, cb) => {
-    let queryString = 'INSERT INTO study.events (name, description, user_id, room_id, event_date) VALUES($1, $2, $3, $4, $5)';
-    let queryParams = [eventData.name, eventData.description, eventData.user_id, eventData.room_id, eventData.event_date];
+    let queryString = 'INSERT INTO study.events (name, user_id, room_id, event_date, event_time) VALUES($1, $2, $3, $4, $5)';
+    let queryParams = [eventData.name, eventData.user_id, eventData.room_id, eventData.event_date, eventData.event_time];
     client.query(queryString, queryParams, (err, data) => {
       if (err) {
         console.log(err);
@@ -283,8 +283,8 @@ module.exports = {
   },
   postGoal: (roomId, goalData, cb) => {
     if (!goalData.goal_date) { delete goalData.goal_date };
-    let queryString = 'INSERT INTO study.goals (name, description, goal_date, user_id, room_id) VALUES($1, $2, $3, $4, $5)';
-    let queryParams = [goalData.name, goalData.description, goalData.goal_date, goalData.user_id, roomId];
+    let queryString = 'INSERT INTO study.goals (name, description, user_id, room_id) VALUES($1, $2, $3, $4)';
+    let queryParams = [goalData.name, goalData.description, goalData.user_id, roomId];
     client.query(queryString, queryParams, (err, data) => {
       if (err) {
         console.log(err);
@@ -354,5 +354,28 @@ module.exports = {
       }
     });
   },
-
+  changeInviteKey: (roomData, cb) => {
+    let queryString = 'UPDATE study.rooms SET invite_key = $1 WHERE id=$2';
+    let queryParams = [roomData.invite_key, roomData.room_id];
+    client.query(queryString, queryParams, (err, data) => {
+      if (err) {
+        console.log(err);
+        cb(err);
+      } else {
+        cb(null, data);
+      }
+    });
+  },
+  addFromInviteKey: (roomData, cb) => {
+    let queryString = 'SELECT EXISTS(SELECT 1 from study.rooms WHERE id = $1 and invite_key = $2)';
+    let queryParams = [roomData.room_id, roomData.invite_key];
+    client.query(queryString, queryParams, (err, data) => {
+      if (err) {
+        console.log(err);
+        cb(err);
+      } else {
+        cb(null, data.rows[0]['exists']);
+      }
+    });
+  },
 }
