@@ -161,3 +161,6 @@ COPY "study"."files"("url", "name", "room_id", "user_id")
 FROM '/home/ubuntu/API/csv/files.csv'
 DELIMITER ','
 CSV HEADER;
+
+DROP extension IF EXISTS pg_trgm;
+CREATE extension pg_trgm;

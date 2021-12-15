@@ -50,9 +50,7 @@ module.exports = {
   },
   findRoom: (searchTerm, cb) => {
     searchTerm = searchTerm.split("'").join("''");
-    console.log(searchTerm);
-    let queryString = `SELECT * FROM study.rooms WHERE name ILIKE '%${searchTerm}%'`;
-    //let queryParams = [searchTerm];
+    let queryString = `SELECT * FROM (SELECT * FROM study.rooms WHERE SIMILARITY(name,'${searchTerm}') > 0.2) a ORDER BY SIMILARITY(name,'${searchTerm}') DESC LIMIT 5`;
     client.query(queryString, (err, data) => {
       if (err) {
         console.log(err);
