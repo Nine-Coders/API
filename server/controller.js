@@ -230,7 +230,7 @@ module.exports = {
         console.log(err);
         cb(err);
       } else {
-        cb(null, data);
+        cb(null, {room_id: uid});
       }
     });
   },
@@ -303,8 +303,8 @@ module.exports = {
   },
   postGoal: (roomId, goalData, cb) => {
     if (!goalData.goal_date) { delete goalData.goal_date };
-    let queryString = 'INSERT INTO study.goals (name, description, user_id, room_id) VALUES($1, $2, $3, $4)';
-    let queryParams = [goalData.name, goalData.description, goalData.user_id, roomId];
+    let queryString = 'INSERT INTO study.goals (name, user_id, room_id) VALUES($1, $2, $3)';
+    let queryParams = [goalData.name, goalData.user_id, roomId];
     client.query(queryString, queryParams, (err, data) => {
       if (err) {
         console.log(err);

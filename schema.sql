@@ -69,7 +69,6 @@ CREATE TABLE "study"."events" (
 CREATE TABLE "study"."goals" (
   "id" SERIAL PRIMARY KEY NOT NULL,
   "name" varchar NOT NULL,
-  "description" varchar NOT NULL,
   "created_at" timestamp default now(),
   "user_id" int NOT NULL,
   "room_id" varchar NOT NULL
@@ -147,7 +146,7 @@ FROM '/home/ubuntu/API/csv/events.csv'
 DELIMITER ','
 CSV HEADER;
 
-COPY "study"."goals"("name", "description", "created_at", "user_id", "room_id")
+COPY "study"."goals"("name", "created_at", "user_id", "room_id")
 FROM '/home/ubuntu/API/csv/goals.csv'
 DELIMITER ','
 CSV HEADER;

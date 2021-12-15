@@ -84,6 +84,40 @@ Response:
 ]
 ```
 
+#### Get details for a room
+
+```http
+  GET /room/:room_id
+```
+
+Query parameters:
+| Parameter | Type      | Description                                |
+| :-------- | :-------- | :----------------------------------------- |
+| `room_id`| `string` | **Required**. Id of room to get details for |
+
+Response:
+
+```bash
+{
+    "id": "hJ_Q0GG000",
+    "name": "the danger zone",
+    "topic_id": 1,
+    "created_at": "2021-01-13T12:05:06.000Z",
+    "thumbnail": "https://via.placeholder.com/200x200",
+    "max_users": 20,
+    "is_private": false,
+    "is_archived": true,
+    "admin_id": 1,
+    "invite_key": null,
+    "user_ids": [
+        1,
+        101,
+        201,
+        50
+    ]
+}
+```
+
 #### Get all rooms for a particular topic
 
 ```http
@@ -169,6 +203,14 @@ Request body:
 | `max_users`      | `integer` | **Required**. Max number of users wanted |
 | `is_private`      | `boolean` | **Required**. Mark room as private |
 | `admin_id`      | `integer` | **Required**. Id of user making the room |
+
+Response:
+
+```bash
+{
+    "room_id": "IYdnM6YiWJ"
+}
+```
 
 #### Add a user to a particular room
 
@@ -345,7 +387,6 @@ Query parameters:
     {
         "id": 1,
         "name": "goal1",
-        "description": "description1",
         "created_at": "2021-04-13T04:05:06.000Z",
         "user_id": 1,
         "room_id": "hJ_Q0GG000",
@@ -357,7 +398,6 @@ Query parameters:
     {
         "id": 101,
         "name": "goal101",
-        "description": "description101",
         "created_at": "2021-07-22T04:05:06.000Z",
         "user_id": 101,
         "room_id": "hJ_Q0GG000",
@@ -412,7 +452,6 @@ Request body:
 | Parameter | Type     | Description                       |
 | :-------- | :------- | :-------------------------------- |
 | `name`      | `string` | **Required**. Name of the goal |
-| `description`      | `string` | **Required**. Description of the goal |
 | `user_id`      | `integer` | **Required**. Id of user who created the goal |
 
 #### Add a user to a given goal
