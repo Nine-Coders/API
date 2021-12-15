@@ -117,8 +117,8 @@ app.get('/user/:user_id/rooms', (req, res) => {
   })
 })
 
-app.get('/room', (req, res) => {
-  db.getRoomDetails(req.query.room_id, (err, response) => {
+app.get('/room/:room_id', (req, res) => {
+  db.getRoomDetails(req.params.room_id, (err, response) => {
     if (err) {
       res.send(err)
     } else {
@@ -160,11 +160,17 @@ app.post('/users/auth', (req, res) => {
 })
 
 app.post('/:topic_id/rooms/create', (req, res) => {
-  db.createRoom(req.params.topic_id, req.body, (err, response) => {
-    if (err) {
-      res.send(err)
+  db.createRoom(req.params.topic_id, req.body, (err1, response1) => {
+    if (err1) {
+      res.send(err1)
     } else {
-      res.send(response)
+      db.addUserToRoom({user_id: req.body.admin_id, room_id: response1.room_id}, (err2, response2) => {
+        if (err2) {
+          res.send(err2)
+        } else {
+          res.send(response1)
+        }
+      })
     }
   })
 })
