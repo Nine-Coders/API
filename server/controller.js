@@ -50,15 +50,33 @@ module.exports = {
   },
   findRoom: (searchTerm, cb) => {
     searchTerm = searchTerm.split("'").join("''");
-    console.log(searchTerm);
-    let queryString = `SELECT * FROM study.rooms WHERE name ILIKE '%${searchTerm}%'`;
-    //let queryParams = [searchTerm];
+    let queryString = `SELECT * FROM (SELECT * FROM study.rooms WHERE SIMILARITY(name,'${searchTerm}') > 0.2) a ORDER BY SIMILARITY(name,'${searchTerm}') DESC LIMIT 5`;
     client.query(queryString, (err, data) => {
       if (err) {
         console.log(err);
         cb(err);
       } else {
         cb(null, data.rows);
+      }
+    });
+  },
+  getRoomDetails: (roomId, cb) => {
+    let queryString = `
+    SELECT study.rooms.*,
+    array_agg(study."users/rooms".user_id::integer)
+    AS user_ids
+    FROM study.rooms
+    LEFT JOIN study."users/rooms"
+    ON study.rooms.id = study."users/rooms".room_id
+    WHERE study.rooms.id=$1
+    GROUP BY study.rooms.id`;
+    let queryParams = [roomId];
+    client.query(queryString, queryParams, (err, data) => {
+      if (err) {
+        console.log(err);
+        cb(err);
+      } else {
+        cb(null, data.rows[0]);
       }
     });
   },
