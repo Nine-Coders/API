@@ -60,6 +60,26 @@ module.exports = {
       }
     });
   },
+  getRoomDetails: (roomId, cb) => {
+    let queryString = `
+    SELECT study.rooms.*,
+    array_agg(study."users/rooms".user_id::integer)
+    AS user_ids
+    FROM study.rooms
+    LEFT JOIN study."users/rooms"
+    ON study.rooms.id = study."users/rooms".room_id
+    WHERE study.rooms.id=$1
+    GROUP BY study.rooms.id`;
+    let queryParams = [roomId];
+    client.query(queryString, queryParams, (err, data) => {
+      if (err) {
+        console.log(err);
+        cb(err);
+      } else {
+        cb(null, data.rows[0]);
+      }
+    });
+  },
   getAllMessages: (roomId, cb) => {
     let queryString = 'SELECT study.messages.*, study.users.first_name, study.users.last_name FROM study.messages LEFT JOIN study.users ON study.users.id = study.messages.user_id WHERE room_id=$1';
     let queryParams = [roomId];
