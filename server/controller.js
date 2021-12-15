@@ -49,7 +49,9 @@ module.exports = {
     });
   },
   findRoom: (searchTerm, cb) => {
-    let queryString = `SELECT * FROM study.rooms WHERE name LIKE '%${searchTerm}%'`;
+    searchTerm = searchTerm.split("'").join("''");
+    console.log(searchTerm);
+    let queryString = `SELECT * FROM study.rooms WHERE name ILIKE '%${searchTerm}%'`;
     //let queryParams = [searchTerm];
     client.query(queryString, (err, data) => {
       if (err) {
