@@ -481,7 +481,7 @@ Request body:
 | Parameter | Type     | Description                       |
 | :-------- | :------- | :-------------------------------- |
 | `name`      | `string` | **Required**. Name of the goal |
-| `goal_date`      | `date` | **Required**. Date of the goal |
+| `goal_date`      | `date` | Date of the goal (optional) |
 
 #### Delete a goal
 
