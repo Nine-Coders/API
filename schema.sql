@@ -10,7 +10,7 @@ CREATE TABLE "study"."topics" (
 
 CREATE TABLE "study"."rooms" (
   "id" varchar PRIMARY KEY NOT NULL,
-  "name" varchar NOT NULL,
+  "name" varchar NOT NULL UNIQUE,
   "topic_id" int NOT NULL,
   "created_at" timestamp default now(),
   "thumbnail" varchar NOT NULL,
@@ -71,7 +71,8 @@ CREATE TABLE "study"."goals" (
   "name" varchar NOT NULL,
   "created_at" timestamp default now(),
   "user_id" int NOT NULL,
-  "room_id" varchar NOT NULL
+  "room_id" varchar NOT NULL,
+  "goal_date" date default null
 );
 
 CREATE TABLE "study"."users/goals" (
@@ -103,7 +104,7 @@ ALTER TABLE "study"."users/rooms" ADD FOREIGN KEY ("user_id") REFERENCES "study"
 
 ALTER TABLE "study"."users/goals" ADD FOREIGN KEY ("user_id") REFERENCES "study"."users" ("id");
 
-ALTER TABLE "study"."users/goals" ADD FOREIGN KEY ("goal_id") REFERENCES "study"."goals" ("id");
+ALTER TABLE "study"."users/goals" ADD FOREIGN KEY ("goal_id") REFERENCES "study"."goals" ("id") ON DELETE CASCADE;
 
 ALTER TABLE "study"."files" ADD FOREIGN KEY ("user_id") REFERENCES "study"."users" ("id");
 
