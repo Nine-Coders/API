@@ -41,7 +41,6 @@ Study IO requires Postgres. To locally load mock data:
 ```
 
 Response:
-
 ```bash
 [
     {
@@ -66,7 +65,6 @@ Response:
 ```
 
 Response:
-
 ```bash
 [
     {
@@ -97,7 +95,6 @@ Query parameters:
 | `room_id`| `string` | **Required**. Id of room to get details for |
 
 Response:
-
 ```bash
 {
     "id": "hJ_Q0GG000",
@@ -131,7 +128,6 @@ Query parameters:
 | `topic_id`| `integer` | **Required**. Id of topic to get rooms for |
 
 Response:
-
 ```bash
 [
     {
@@ -208,7 +204,6 @@ Request body:
 | `admin_id`      | `integer` | **Required**. Id of user making the room |
 
 Response:
-
 ```bash
 {
     "room_id": "IYdnM6YiWJ"
@@ -279,7 +274,6 @@ Query parameters:
 | `room_id` | `string` | **Required**. Id of room to get messages for |
 
 Response:
-
 ```bash
 [
     {
@@ -334,7 +328,6 @@ Query parameters:
 | `room_id` | `string` | **Required**. Id of room to get users for |
 
 Response:
-
 ```bash
 [
     {
@@ -396,6 +389,7 @@ Query parameters:
 | :-------- | :------- | :-------------------------------- |
 | `room_id` | `string` | **Required**. Id of the room to retrive goals from |
 
+Response:
 ```bash
 [
     {
@@ -434,6 +428,7 @@ Query parameters:
 | :-------- | :------- | :-------------------------------- |
 | `goal_id` | `integer` | **Required**. Id of the goal to retrieve users from |
 
+Response:
 ```bash
 [
     {
@@ -469,6 +464,12 @@ Request body:
 | `user_id`      | `integer` | **Required**. Id of user who created the goal |
 | `goal_date`      | `date` | End date to reach goal (optional) |
 
+Response:
+```bash
+{
+  "goal_id": 1
+}
+```
 
 #### Update a goal
 
@@ -519,6 +520,7 @@ Query parameters:
 | :-------- | :------- | :-------------------------------- |
 | `room_id` | `string` | **Required**. Id of the room to retrieve events from |
 
+Response:
 ```bash
 [
     {
@@ -549,6 +551,12 @@ Request body:
 | `event_date`      | `date` | **Required**. Date of the event |
 | `event_time`      | `time` | **Required**. Time of the event |
 
+Response:
+```bash
+{
+  "event_id": 101
+}
+```
 
 #### Update an event
 
@@ -591,6 +599,7 @@ Query parameters:
 | :-------- | :------- | :-------------------------------- |
 | `room_id` | `string` | **Required**. Id of the room to retrieve file URLs from |
 
+Response:
 ```bash
 [
     {
@@ -623,6 +632,13 @@ Request Body:
 | `name` | `string` | **Required**. Name of the file |
 | `user_id` | `string` | **Required**. Id of the user who is posting the file |
 
+Response:
+```bash
+{
+  "file_id": 99
+}
+```
+
 #### Remove a file from a given room
 
 ```http
@@ -651,7 +667,7 @@ Request Body:
 Note:
 Password OR Google ID can be provided
 
-Response:
+Responses:
 On successful authenthication:
 ```bash
 {
