@@ -249,14 +249,14 @@ module.exports = {
     });
   },
   postEvent: (eventData, cb) => {
-    let queryString = 'INSERT INTO study.events (name, user_id, room_id, event_date, event_time) VALUES($1, $2, $3, $4, $5)';
+    let queryString = 'INSERT INTO study.events (name, user_id, room_id, event_date, event_time) VALUES($1, $2, $3, $4, $5) RETURNING id AS event_id';
     let queryParams = [eventData.name, eventData.user_id, eventData.room_id, eventData.event_date, eventData.event_time];
     client.query(queryString, queryParams, (err, data) => {
       if (err) {
         console.log(err);
         cb(err);
       } else {
-        cb(null, data);
+        cb(null, data.rows[0]);
       }
     });
   },
@@ -337,14 +337,14 @@ module.exports = {
   },
   postGoal: (roomId, goalData, cb) => {
     if (!goalData.goal_date) { delete goalData.goal_date };
-    let queryString = 'INSERT INTO study.goals (name, user_id, room_id, goal_date) VALUES($1, $2, $3, $4)';
+    let queryString = 'INSERT INTO study.goals (name, user_id, room_id, goal_date) VALUES($1, $2, $3, $4) RETURNING id AS goal_id';
     let queryParams = [goalData.name, goalData.user_id, roomId, goalData.goal_date];
     client.query(queryString, queryParams, (err, data) => {
       if (err) {
         console.log(err);
         cb(err);
       } else {
-        cb(null, data);
+        cb(null, data.rows[0]);
       }
     });
   },
@@ -410,14 +410,14 @@ module.exports = {
     });
   },
   postFile: (roomId, fileData, cb) => {
-    let queryString = 'INSERT INTO study.files (url, name, room_id, user_id) VALUES($1, $2, $3, $4)';
+    let queryString = 'INSERT INTO study.files (url, name, room_id, user_id) VALUES($1, $2, $3, $4) RETURNING id AS file_id';
     let queryParams = [fileData.url, fileData.name, roomId, fileData.user_id];
     client.query(queryString, queryParams, (err, data) => {
       if (err) {
         console.log(err);
         cb(err);
       } else {
-        cb(null, data);
+        cb(null, data.rows[0]);
       }
     });
   },
