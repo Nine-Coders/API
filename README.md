@@ -198,7 +198,7 @@ Response:
 Request body:
 | Parameter | Type     | Description                       |
 | :-------- | :------- | :-------------------------------- |
-| `name`      | `string` | **Required**. Name of room |
+| `name`      | `string` | **Required**. **Unique**. Name of room |
 | `thumbnail`      | `string` | **Required**. URL of thumbnail image |
 | `max_users`      | `integer` | **Required**. Max number of users wanted |
 | `is_private`      | `boolean` | **Required**. Mark room as private |
@@ -354,6 +354,17 @@ Response:
 ]
 ```
 
+#### Get all rooms for a particular user
+
+```http
+  GET /user/:user_id/rooms
+```
+
+Query parameters:
+| Parameter | Type      | Description                               |
+| :-------- | :-------- | :---------------------------------------- |
+| `user_id` | `id` | **Required**. Id of user to get rooms for |
+
 #### Create a user
 ```http
   POST /users/create
@@ -453,6 +464,35 @@ Request body:
 | :-------- | :------- | :-------------------------------- |
 | `name`      | `string` | **Required**. Name of the goal |
 | `user_id`      | `integer` | **Required**. Id of user who created the goal |
+| `goal_date`      | `date` | End date to reach goal (optional) |
+
+
+#### Update a goal
+
+```http
+  PUT /goals/:goal_id
+```
+Query parameters:
+| Parameter | Type     | Description                       |
+| :-------- | :------- | :-------------------------------- |
+| `goal_id`      | `string` | **Required**. Id of the goal |
+
+Request body:
+| Parameter | Type     | Description                       |
+| :-------- | :------- | :-------------------------------- |
+| `name`      | `string` | **Required**. Name of the goal |
+| `goal_date`      | `date` | **Required**. Date of the goal |
+
+#### Delete a goal
+
+```http
+  DELETE /goals/:goal_id
+```
+
+Query parameters:
+| Parameter | Type     | Description                       |
+| :-------- | :------- | :-------------------------------- |
+| `goal_id` | `integer` | **Required**. Id of the goal to delete |
 
 #### Add a user to a given goal
 
@@ -506,6 +546,36 @@ Request body:
 | `event_date`      | `date` | **Required**. Date of the event |
 | `event_time`      | `time` | **Required**. Time of the event |
 
+
+#### Update an event
+
+```http
+  PUT /events/:event_id
+```
+
+Query parameters:
+| Parameter | Type     | Description                       |
+| :-------- | :------- | :-------------------------------- |
+| `event_id` | `integer` | **Required**. Id of the event |
+
+Request body:
+| Parameter | Type     | Description                       |
+| :-------- | :------- | :-------------------------------- |
+| `name`      | `string` | **Required**. Name of the event |
+| `event_date`      | `date` | **Required**. Date of the event |
+| `event_time`      | `time` | **Required**. Time of the event |
+
+#### Delete an event
+
+```http
+  DELETE /events/:event_id
+```
+
+Query parameters:
+| Parameter | Type     | Description                       |
+| :-------- | :------- | :-------------------------------- |
+| `event_id` | `integer` | **Required**. Id of the event to delete |
+
 ### FILES
 #### Get all files for a given room
 
@@ -553,7 +623,7 @@ Request Body:
 #### Remove a file from a given room
 
 ```http
-  POST /files/:file_id/delete
+  DELETE /files/:file_id/delete
 ```
 
 Query parameters:

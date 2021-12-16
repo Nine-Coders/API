@@ -81,7 +81,7 @@ module.exports = {
     });
   },
   getAllMessages: (roomId, cb) => {
-    let queryString = 'SELECT study.messages.*, study.users.first_name, study.users.last_name FROM study.messages LEFT JOIN study.users ON study.users.id = study.messages.user_id WHERE room_id=$1';
+    let queryString = 'SELECT study.messages.*, study.users.first_name, study.users.last_name FROM study.messages LEFT JOIN study.users ON study.users.id = study.messages.user_id WHERE room_id=$1 ORDER BY study.messages.created_at ASC';
     let queryParams = [roomId];
     client.query(queryString, queryParams, (err, data) => {
       if (err) {
@@ -218,6 +218,8 @@ module.exports = {
           }
         }
       });
+    } else {
+      cb('password or googleId was not provided')
     }
   },
   createRoom: (topicId, roomData, cb) => {
@@ -270,17 +272,49 @@ module.exports = {
       }
     });
   },
-  toggleArchiveRoom: (roomId, cb) => {
-    let queryString = 'UPDATE study.rooms SET is_archived = NOT is_archived WHERE id=$1';
-    let queryParams = [roomId.room_id];
+  updateEvent: (event_id, eventData, cb) => {
+    if (eventData.event_date && eventData.event_time && eventData.name) {
+      let queryString = 'UPDATE study.events SET event_date = $1, event_time = $2, name = $3 WHERE id=$4';
+      let queryParams = [eventData.event_date, eventData.event_time, eventData.name, event_id];
+      client.query(queryString, queryParams, (err, data) => {
+        if (err) {
+          console.log(err);
+          cb(err);
+        } else {
+          cb(null, data);
+        }
+      });
+    } else {
+      cb('event_date, event_time, and/or name is missing from the request body')
+    }
+  },
+  deleteEvent: (event_id, cb) => {
+    let queryString = 'DELETE FROM study.events WHERE id=$1';
+    let queryParams = [event_id];
     client.query(queryString, queryParams, (err, data) => {
       if (err) {
         console.log(err);
         cb(err);
       } else {
-        cb(null, data.rows);
+        cb(null, data);
       }
     });
+  },
+  toggleArchiveRoom: (roomId, cb) => {
+    if (roomId.room_id) {
+      let queryString = 'UPDATE study.rooms SET is_archived = NOT is_archived WHERE id=$1';
+      let queryParams = [roomId.room_id];
+      client.query(queryString, queryParams, (err, data) => {
+        if (err) {
+          console.log(err);
+          cb(err);
+        } else {
+          cb(null, data);
+        }
+      });
+    } else {
+      cb('room id missing from request body')
+    }
   },
   getGoals: (roomId, cb) => {
     let queryString = `SELECT study.goals.*,
@@ -303,8 +337,8 @@ module.exports = {
   },
   postGoal: (roomId, goalData, cb) => {
     if (!goalData.goal_date) { delete goalData.goal_date };
-    let queryString = 'INSERT INTO study.goals (name, user_id, room_id) VALUES($1, $2, $3)';
-    let queryParams = [goalData.name, goalData.user_id, roomId];
+    let queryString = 'INSERT INTO study.goals (name, user_id, room_id, goal_date) VALUES($1, $2, $3, $4)';
+    let queryParams = [goalData.name, goalData.user_id, roomId, goalData.goal_date];
     client.query(queryString, queryParams, (err, data) => {
       if (err) {
         console.log(err);
@@ -335,6 +369,31 @@ module.exports = {
         cb(err);
       } else {
         cb(null, data.rows);
+      }
+    });
+  },
+  updateGoal: (goalId, goalData, cb) => {
+    let goalDate = goalData.goal_date || null;
+    let queryString = 'UPDATE study.goals SET name = $1, goal_date = $2 WHERE id=$3';
+    let queryParams = [goalData.name, goalDate, goalId];
+    client.query(queryString, queryParams, (err, data) => {
+      if (err) {
+        console.log(err);
+        cb(err);
+      } else {
+        cb(null, data);
+      }
+    });
+  },
+  deleteGoal: (goalId, cb) => {
+    let queryString = 'DELETE FROM study.goals WHERE id=$1';
+    let queryParams = [goalId];
+    client.query(queryString, queryParams, (err, data) => {
+      if (err) {
+        console.log(err);
+        cb(err);
+      } else {
+        cb(null, data);
       }
     });
   },
@@ -375,27 +434,35 @@ module.exports = {
     });
   },
   changeInviteKey: (roomData, cb) => {
-    let queryString = 'UPDATE study.rooms SET invite_key = $1 WHERE id=$2';
-    let queryParams = [roomData.invite_key, roomData.room_id];
-    client.query(queryString, queryParams, (err, data) => {
-      if (err) {
-        console.log(err);
-        cb(err);
-      } else {
-        cb(null, data);
-      }
-    });
+    if (roomData.invite_key && roomData.room_id) {
+      let queryString = 'UPDATE study.rooms SET invite_key = $1 WHERE id=$2';
+      let queryParams = [roomData.invite_key, roomData.room_id];
+      client.query(queryString, queryParams, (err, data) => {
+        if (err) {
+          console.log(err);
+          cb(err);
+        } else {
+          cb(null, data);
+        }
+      });
+    } else {
+      cb('invite key or room_id not sent in request body')
+    }
   },
   addFromInviteKey: (roomData, cb) => {
-    let queryString = 'SELECT EXISTS(SELECT 1 from study.rooms WHERE id = $1 and invite_key = $2)';
-    let queryParams = [roomData.room_id, roomData.invite_key];
-    client.query(queryString, queryParams, (err, data) => {
-      if (err) {
-        console.log(err);
-        cb(err);
-      } else {
-        cb(null, data.rows[0]['exists']);
-      }
-    });
+    if (roomData.room_id && roomData.invite_key) {
+      let queryString = 'SELECT EXISTS(SELECT 1 from study.rooms WHERE id = $1 and invite_key = $2)';
+      let queryParams = [roomData.room_id, roomData.invite_key];
+      client.query(queryString, queryParams, (err, data) => {
+        if (err) {
+          console.log(err);
+          cb(err);
+        } else {
+          cb(null, data.rows[0]['exists']);
+        }
+      });
+    } else {
+      cb('invite key or room_id not sent in request body')
+    }
   },
 }
