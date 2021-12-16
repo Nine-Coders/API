@@ -79,6 +79,7 @@ Response:
         "is_private": false,
         "is_archived": true,
         "admin_id": 1
+        "invite_key": null
     },
     ...
 ]
@@ -143,6 +144,7 @@ Response:
         "is_private": false,
         "is_archived": true,
         "admin_id": 1
+        "invite_key": null
     },
     ...
 ]
@@ -157,33 +159,34 @@ Response:
 Request body:
 | Parameter | Type      | Description                                |
 | :-------- | :-------- | :----------------------------------------- |
-| `search_value`| `string` | **Required**. Text to search for rooms (case sensitive)|
+| `search_value`| `string` | **Required**. Text to search for rooms |
 
 Response:
-
 ```bash
 [
     {
-        "id": 10,
-        "name": "the room",
-        "topic_id": 7,
-        "created_at": "2021-01-22T12:05:06.000Z",
-        "thumbnail": "https://via.placeholder.com/200x200",
-        "max_users": 20,
-        "is_private": true,
-        "is_archived": false,
-        "admin_id": 10
-    },
-    {
-        "id": 11,
-        "name": "room1",
-        "topic_id": 1,
-        "created_at": "2021-01-23T12:05:06.000Z",
+        "id": "hJ_Q0GG013",
+        "name": "room4",
+        "topic_id": 4,
+        "created_at": "2021-01-26T04:05:06.000Z",
         "thumbnail": "https://via.placeholder.com/200x200",
         "max_users": 20,
         "is_private": false,
         "is_archived": false,
-        "admin_id": 1
+        "admin_id": 5,
+        "invite_key": null
+    },
+    {
+        "id": "hJ_Q0GG011",
+        "name": "room2",
+        "topic_id": 2,
+        "created_at": "2021-01-24T04:05:06.000Z",
+        "thumbnail": "https://via.placeholder.com/200x200",
+        "max_users": 20,
+        "is_private": true,
+        "is_archived": false,
+        "admin_id": 3,
+        "invite_key": null
     },
     ...
 ]
@@ -250,7 +253,7 @@ Request body:
 #### Verify if invite key is for a particular room
 
 ```http
-  POST /rooms/new-invite-key
+  POST /rooms/check-invite-key
 ```
 
 Request body:
