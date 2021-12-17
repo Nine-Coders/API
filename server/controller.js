@@ -237,8 +237,8 @@ module.exports = {
     });
   },
   addUserToRoom: (data, cb) => {
-    let queryString = 'INSERT INTO study."users/rooms" (user_id, room_id) VALUES($1, $2)';
-    let queryParams = [data.user_id, data.room_id];
+    let queryString = 'INSERT INTO study."users/rooms" (user_id, room_id) SELECT $1, $2 WHERE NOT EXISTS (SELECT 1 FROM study."users/rooms" WHERE (user_id, room_id) = ($3, $4))';
+    let queryParams = [data.user_id, data.room_id, data.user_id, data.room_id];
     client.query(queryString, queryParams, (err, data) => {
       if (err) {
         console.log(err);
